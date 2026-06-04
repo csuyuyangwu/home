@@ -46,10 +46,10 @@
                     <p class="bio">{{ profile.bio }}</p>
                     <div class="social-links">
                         <a v-for="social in socialLinks" :key="social.name"
-                            :href="social.name === 'WeChat' || social.name === '微信' ? undefined : social.url"
-                            :target="social.name === 'WeChat' || social.name === '微信' ? undefined : '_blank'"
+                            :href="isSpecialLink(social.name) ? undefined : social.url"
+                            :target="isSpecialLink(social.name) ? undefined : '_blank'"
                             class="social-link" :title="social.name"
-                            @click="social.name === 'WeChat' || social.name === '微信' ? openWechat() : null">
+                            @click="handleSocialClick(social.name)">
                             <i :class="social.icon"></i>
                         </a>
                     </div>
@@ -222,9 +222,9 @@
                         <h4>{{ tt('Connect', '联系方式') }}</h4>
                         <div class="contact-items">
                             <a v-for="social in socialLinks" :key="social.name"
-                                :href="social.name === 'WeChat' || social.name === '微信' ? undefined : social.url"
-                                :target="social.name === 'WeChat' || social.name === '微信' ? undefined : '_blank'"
-                                @click="social.name === 'WeChat' || social.name === '微信' ? openWechat() : null">
+                                :href="isSpecialLink(social.name) ? undefined : social.url"
+                                :target="isSpecialLink(social.name) ? undefined : '_blank'"
+                                @click="handleSocialClick(social.name)">
                                 <i :class="social.icon"></i> {{ social.name }}
                             </a>
                         </div>
@@ -253,6 +253,27 @@
                 <p>{{ tt('Scan to add WeChat', '扫码添加微信') }}</p>
             </div>
         </div>
+
+        <!-- Email Modal -->
+        <div class="wechat-modal" :class="{ active: showEmail }" @click.self="closeEmail">
+            <div class="wechat-modal-content">
+                <button class="wechat-modal-close" @click="closeEmail">
+                    <i class="ri-close-line"></i>
+                </button>
+                <div class="email-list">
+                    <div class="email-item">
+                        <i class="ri-qq-fill"></i>
+                        <span>QQ</span>
+                        <a href="mailto:2995824036@qq.com">2995824036@qq.com</a>
+                    </div>
+                    <div class="email-item">
+                        <i class="ri-mail-fill"></i>
+                        <span>Outlook</span>
+                        <a href="mailto:yuyangwu112411@outlook.com">yuyangwu112411@outlook.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -276,6 +297,20 @@
                 const showWechat = ref(false);
                 function openWechat() { showWechat.value = true; }
                 function closeWechat() { showWechat.value = false; }
+
+                // ===== 邮箱弹窗 =====
+                const showEmail = ref(false);
+                function openEmail() { showEmail.value = true; }
+                function closeEmail() { showEmail.value = false; }
+
+                // ===== 社交链接点击处理 =====
+                function isSpecialLink(name) {
+                    return name === 'WeChat' || name === '微信' || name === 'Email';
+                }
+                function handleSocialClick(name) {
+                    if (name === 'WeChat' || name === '微信') { openWechat(); return; }
+                    if (name === 'Email') { openEmail(); return; }
+                }
 
                 // ===== 站点配置 =====
                 const site = reactive({
@@ -823,6 +858,7 @@
 
                 return {
                     lang, tt, toggleLang, showWechat, openWechat, closeWechat,
+                    showEmail, openEmail, closeEmail, isSpecialLink, handleSocialClick,
                     site, navLinks, profile, socialLinks, about, skills, projects,
                     experience, news, stats, resourceLinks, typedText, hitokoto, poetry,
                     currentYear, visibleSections
