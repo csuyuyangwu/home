@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -26,6 +26,9 @@
                 <div class="nav-brand">&lt;/&gt; {{ site.name }}</div>
                 <div class="nav-links">
                     <a v-for="link in navLinks" :key="link.id" :href="'#' + link.id">{{ link.title }}</a>
+                    <button class="lang-toggle" @click="toggleLang">
+                        <i class="ri-global-line"></i> {{ lang === 'en' ? '中文' : 'English' }}
+                    </button>
                 </div>
             </nav>
 
@@ -54,7 +57,7 @@
                 <section id="about" class="section" :class="{ visible: visibleSections.about }">
                     <div class="section-header">
                         <i class="ri-user-star-line"></i>
-                        <h2>About Me</h2>
+                        <h2>{{ _t('About Me', '关于我') }}</h2>
                         <span class="section-line"></span>
                     </div>
                     <div class="about-intro">
@@ -77,7 +80,7 @@
                 <section id="skills" class="section" :class="{ visible: visibleSections.skills }">
                     <div class="section-header">
                         <i class="ri-stack-line"></i>
-                        <h2>Technology Stack</h2>
+                        <h2>{{ _t('Technology Stack', '技术栈') }}</h2>
                         <span class="section-line"></span>
                     </div>
                     <div class="tech-categories">
@@ -102,7 +105,7 @@
                 <section id="projects" class="section" :class="{ visible: visibleSections.projects }">
                     <div class="section-header">
                         <i class="ri-folder-fill"></i>
-                        <h2>Core Projects</h2>
+                        <h2>{{ _t('Core Projects', '核心项目') }}</h2>
                         <span class="section-line"></span>
                     </div>
                     <div class="projects-grid">
@@ -129,7 +132,7 @@
                 <section id="experience" class="section" :class="{ visible: visibleSections.experience }">
                     <div class="section-header">
                         <i class="ri-time-line"></i>
-                        <h2>Experience</h2>
+                        <h2>{{ _t('Experience', '经历') }}</h2>
                         <span class="section-line"></span>
                     </div>
                     <div class="timeline">
@@ -149,7 +152,7 @@
                 <section id="news" class="section" :class="{ visible: visibleSections.news }">
                     <div class="section-header">
                         <i class="ri-newspaper-line"></i>
-                        <h2>News & Achievements</h2>
+                        <h2>{{ _t('News & Achievements', '动态与成果') }}</h2>
                         <span class="section-line"></span>
                     </div>
                     <div class="news-grid">
@@ -190,7 +193,7 @@
                 <section id="links" class="section" :class="{ visible: visibleSections.links }">
                     <div class="section-header">
                         <i class="ri-link"></i>
-                        <h2>Resources</h2>
+                        <h2>{{ _t('Resources', '资源') }}</h2>
                         <span class="section-line"></span>
                     </div>
                     <div class="links-grid">
@@ -212,7 +215,7 @@
                         <p>{{ site.slogan }}</p>
                     </div>
                     <div class="footer-contact">
-                        <h4>Connect</h4>
+                        <h4>{{ _t('Connect', '联系方式') }}</h4>
                         <div class="contact-items">
                             <a v-for="social in socialLinks" :key="social.name" :href="social.url" target="_blank">
                                 <i :class="social.icon"></i> {{ social.name }}
@@ -221,13 +224,13 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p class="copyright-main">&copy; 2019 - {{ currentYear }} {{ site.name }} · All Rights Reserved</p>
+                    <p class="copyright-main">&copy; 2019 - {{ currentYear }} {{ site.name }} · {{ _t('All Rights Reserved', '保留所有权利') }}</p>
                     <p class="copyright-sub">
-                        <span>Powered by Vue 3</span>
+                        <span>{{ _t('Powered by Vue 3', '基于 Vue 3 构建') }}</span>
                         <span class="divider">|</span>
                         <span><a href="https://github.com/wexuo" target="_blank">GitHub</a></span>
                         <span class="divider">|</span>
-                        <span>Made with <i class="ri-heart-fill"></i> in China</span>
+                        <span>{{ _t('Made with', '用') }} <i class="ri-heart-fill"></i> {{ _t('in China', '在中国制作') }}</span>
                     </p>
                 </div>
             </footer>
@@ -236,205 +239,251 @@
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script>
-        const { createApp, ref, reactive, onMounted, computed } = Vue;
+        const { createApp, ref, reactive, onMounted, computed, watch } = Vue;
 
         createApp({
             setup() {
+                // ===== 语言切换 =====
+                const lang = ref('en');
+
+                function _t(en, zh) {
+                    return lang.value === 'en' ? en : zh;
+                }
+
+                function toggleLang() {
+                    lang.value = lang.value === 'en' ? 'zh' : 'en';
+                }
+
                 // ===== 站点配置 =====
-                const site = reactive({
-                    name: '吴雨阳',
-                    slogan: '探索未知，代码为舟'
-                });
+                const site = computed(() => ({
+                    name: _t('Yuyang Wu', '吴雨阳'),
+                    slogan: _t('Explore the unknown, code as the vessel', '探索未知，代码为舟')
+                }));
 
                 // ===== 导航链接 =====
-                const navLinks = ref([
-                    { id: 'about', title: '关于' },
-                    { id: 'skills', title: '技术栈' },
-                    { id: 'projects', title: '项目' },
-                    { id: 'experience', title: '经历' },
-                    { id: 'news', title: '动态' },
-                    { id: 'contact', title: '联系' }
+                const navLinks = computed(() => [
+                    { id: 'about', title: _t('About', '关于') },
+                    { id: 'skills', title: _t('Skills', '技术栈') },
+                    { id: 'projects', title: _t('Projects', '项目') },
+                    { id: 'experience', title: _t('Experience', '经历') },
+                    { id: 'news', title: _t('News', '动态') },
+                    { id: 'contact', title: _t('Contact', '联系') }
                 ]);
 
                 // ===== 个人信息 =====
-                const profile = reactive({
-                    name: '吴雨阳',
+                const profile = computed(() => ({
+                    name: _t('Yuyang Wu', '吴雨阳'),
                     avatar: 'static/img/avatar.svg',
-                    title: 'Senior Backend Engineer · System Architect',
-                    bio: '专注于遥感图像处理，遥感图像智能解译，视觉语言模型，具身智能'
-                });
+                    title: _t('Senior Backend Engineer · System Architect', '高级后端工程师 · 系统架构师'),
+                    bio: _t(
+                        'Focusing on remote sensing image processing, intelligent interpretation, vision-language models, and embodied intelligence.',
+                        '专注于遥感图像处理，遥感图像智能解译，视觉语言模型，具身智能'
+                    )
+                }));
 
                 // ===== 社交链接 =====
-                const socialLinks = ref([
+                const socialLinks = computed(() => [
                     { name: 'GitHub', icon: 'ri-github-fill', url: 'https://github.com/csuyuyangwu' },
                     { name: 'Email', icon: 'ri-mail-fill', url: '#' },
-                    { name: '掘金', icon: 'ri-quill-pen-fill', url: '#' },
-                    { name: '知乎', icon: 'ri-zhihu-fill', url: '#' },
-                    { name: '微信', icon: 'ri-wechat-fill', url: '#' }
+                    { name: _t('Juejin', '掘金'), icon: 'ri-quill-pen-fill', url: '#' },
+                    { name: _t('Zhihu', '知乎'), icon: 'ri-zhihu-fill', url: '#' },
+                    { name: _t('WeChat', '微信'), icon: 'ri-wechat-fill', url: '#' }
                 ]);
 
                 // ===== 关于我 =====
-                const about = reactive({
-                    intro: '我来自中国黄山，目前就读于中南大学遥感科学与技术专业。我的研究兴趣包括视觉-语言模型、计算机视觉、摄影测量与遥感以及模式识别。',
+                const about = computed(() => ({
+                    intro: _t(
+                        'I come from Huangshan, China, and am currently studying Remote Sensing Science and Technology at Central South University. My research interests include vision-language models, computer vision, photogrammetry and remote sensing, and pattern recognition.',
+                        '我来自中国黄山，目前就读于中南大学遥感科学与技术专业。我的研究兴趣包括视觉-语言模型、计算机视觉、摄影测量与遥感以及模式识别。'
+                    ),
                     cards: [
-                        { icon: 'ri-code-s-slash-fill', title: '服务端开发', desc: '精通 Java，熟练掌握 Go、Python，具备多语言混合编程能力，专注于构建高性能服务端应用' },
-                        { icon: 'ri-cloud-fill', title: '微服务架构', desc: '精通 Spring Cloud / Dubbo 微服务体系，熟悉 Service Mesh，有大规模微服务治理与调优实战经验' },
-                        { icon: 'ri-database-2-fill', title: '数据架构', desc: '精通 MySQL 调优、Redis 缓存架构，熟悉 Elasticsearch、MongoDB、ClickHouse 等数据存储方案' },
-                        { icon: 'ri-route-fill', title: '分布式系统', desc: '熟悉分布式事务、分布式锁、一致性协议，有高并发系统设计与调优经验' },
-                        { icon: 'ri-layout-fill', title: '全栈能力', desc: '具备前端开发能力，熟练使用 Vue3、React、TypeScript，可独立完成全栈项目开发' },
-                        { icon: 'ri-smartphone-fill', title: '移动端开发', desc: '熟悉 uni-app 跨端开发框架，具备小程序、H5、App 多端统一开发能力' }
+                        { icon: 'ri-code-s-slash-fill', title: _t('Backend Development', '服务端开发'), desc: _t('Proficient in Java, skilled in Go and Python, with multi-language programming capabilities, focused on building high-performance server-side applications.', '精通 Java，熟练掌握 Go、Python，具备多语言混合编程能力，专注于构建高性能服务端应用') },
+                        { icon: 'ri-cloud-fill', title: _t('Microservices Architecture', '微服务架构'), desc: _t('Proficient in Spring Cloud / Dubbo microservice ecosystem, familiar with Service Mesh, with hands-on experience in large-scale microservice governance and optimization.', '精通 Spring Cloud / Dubbo 微服务体系，熟悉 Service Mesh，有大规模微服务治理与调优实战经验') },
+                        { icon: 'ri-database-2-fill', title: _t('Data Architecture', '数据架构'), desc: _t('Proficient in MySQL tuning and Redis cache architecture, familiar with Elasticsearch, MongoDB, ClickHouse and other data storage solutions.', '精通 MySQL 调优、Redis 缓存架构，熟悉 Elasticsearch、MongoDB、ClickHouse 等数据存储方案') },
+                        { icon: 'ri-route-fill', title: _t('Distributed Systems', '分布式系统'), desc: _t('Familiar with distributed transactions, distributed locks, and consensus protocols, with experience in high-concurrency system design and optimization.', '熟悉分布式事务、分布式锁、一致性协议，有高并发系统设计与调优经验') },
+                        { icon: 'ri-layout-fill', title: _t('Full-Stack Capabilities', '全栈能力'), desc: _t('Possess front-end development skills, proficient in Vue3, React, and TypeScript, capable of independently completing full-stack projects.', '具备前端开发能力，熟练使用 Vue3、React、TypeScript，可独立完成全栈项目开发') },
+                        { icon: 'ri-smartphone-fill', title: _t('Mobile Development', '移动端开发'), desc: _t('Familiar with uni-app cross-platform development framework, capable of developing mini-programs, H5, and mobile apps across multiple platforms.', '熟悉 uni-app 跨端开发框架，具备小程序、H5、App 多端统一开发能力') }
                     ]
-                });
+                }));
 
                 // ===== 技术栈 =====
-                const skills = ref([
+                const skills = computed(() => [
                     {
-                        name: '编程语言',
+                        name: _t('Programming Languages', '编程语言'),
                         icon: 'ri-code-s-fill',
                         items: [
-                            { name: 'Java', level: 95, levelName: '精通' },
-                            { name: 'Python', level: 75, levelName: '熟练' },
-                            { name: 'Go', level: 65, levelName: '掌握' },
-                            { name: 'TypeScript', level: 65, levelName: '掌握' }
+                            { name: 'Java', level: 95, levelName: _t('Expert', '精通') },
+                            { name: 'Python', level: 75, levelName: _t('Proficient', '熟练') },
+                            { name: 'Go', level: 65, levelName: _t('Skilled', '掌握') },
+                            { name: 'TypeScript', level: 65, levelName: _t('Skilled', '掌握') }
                         ]
                     },
                     {
-                        name: '后端框架',
+                        name: _t('Backend Frameworks', '后端框架'),
                         icon: 'ri-leaf-fill',
                         items: [
-                            { name: 'Spring Boot / Cloud', level: 95, levelName: '精通' },
-                            { name: 'Dubbo / gRPC', level: 85, levelName: '熟练' },
-                            { name: 'MyBatis / JPA', level: 85, levelName: '熟练' },
-                            { name: 'Netty / Vert.x', level: 70, levelName: '掌握' }
+                            { name: 'Spring Boot / Cloud', level: 95, levelName: _t('Expert', '精通') },
+                            { name: 'Dubbo / gRPC', level: 85, levelName: _t('Proficient', '熟练') },
+                            { name: 'MyBatis / JPA', level: 85, levelName: _t('Proficient', '熟练') },
+                            { name: 'Netty / Vert.x', level: 70, levelName: _t('Skilled', '掌握') }
                         ]
                     },
                     {
-                        name: '数据存储',
+                        name: _t('Data Storage', '数据存储'),
                         icon: 'ri-database-fill',
                         items: [
-                            { name: 'MySQL', level: 90, levelName: '精通' },
-                            { name: 'Redis', level: 90, levelName: '精通' },
-                            { name: 'Elasticsearch', level: 75, levelName: '熟练' },
-                            { name: 'MongoDB / ClickHouse', level: 65, levelName: '掌握' }
+                            { name: 'MySQL', level: 90, levelName: _t('Expert', '精通') },
+                            { name: 'Redis', level: 90, levelName: _t('Expert', '精通') },
+                            { name: 'Elasticsearch', level: 75, levelName: _t('Proficient', '熟练') },
+                            { name: 'MongoDB / ClickHouse', level: 65, levelName: _t('Skilled', '掌握') }
                         ]
                     },
                     {
-                        name: '中间件与运维',
+                        name: _t('Middleware & DevOps', '中间件与运维'),
                         icon: 'ri-tools-fill',
                         items: [
-                            { name: 'Kafka / RabbitMQ', level: 85, levelName: '熟练' },
-                            { name: 'Docker / K8s', level: 80, levelName: '熟练' },
-                            { name: 'Jenkins / GitLab CI', level: 75, levelName: '熟练' },
-                            { name: 'Prometheus / Grafana', level: 70, levelName: '掌握' }
+                            { name: 'Kafka / RabbitMQ', level: 85, levelName: _t('Proficient', '熟练') },
+                            { name: 'Docker / K8s', level: 80, levelName: _t('Proficient', '熟练') },
+                            { name: 'Jenkins / GitLab CI', level: 75, levelName: _t('Proficient', '熟练') },
+                            { name: 'Prometheus / Grafana', level: 70, levelName: _t('Skilled', '掌握') }
                         ]
                     }
                 ]);
 
                 // ===== 项目经验 =====
-                const projects = ref([
+                const projects = computed(() => [
                     {
                         icon: 'ri-shopping-bag-fill',
-                        title: '电商交易系统',
-                        desc: '负责核心交易链路开发，涵盖订单系统、库存管理、支付对接等模块。通过 Redis 缓存优化、异步削峰等手段提升系统性能，保障大促期间系统稳定运行。',
+                        title: _t('E-Commerce Trading System', '电商交易系统'),
+                        desc: _t(
+                            'Responsible for core trading chain development, covering order system, inventory management, and payment integration. Improved system performance through Redis cache optimization and async peak-shaving, ensuring stable operation during peak sales periods.',
+                            '负责核心交易链路开发，涵盖订单系统、库存管理、支付对接等模块。通过 Redis 缓存优化、异步削峰等手段提升系统性能，保障大促期间系统稳定运行。'
+                        ),
                         tags: ['Spring Boot', 'MySQL', 'Redis', 'RabbitMQ'],
                         metrics: [
-                            { value: '10W+', label: '日均订单' },
-                            { value: '99.9%', label: '可用性' }
+                            { value: '10W+', label: _t('Daily Orders', '日均订单') },
+                            { value: '99.9%', label: _t('Availability', '可用性') }
                         ]
                     },
                     {
                         icon: 'ri-flashlight-fill',
-                        title: '即时通讯服务',
-                        desc: '基于 Netty 构建的 IM 服务，支持私聊、群聊、消息已读等核心功能。采用 WebSocket 长连接 + 消息队列架构，保证消息实时性和可靠性。',
+                        title: _t('Instant Messaging Service', '即时通讯服务'),
+                        desc: _t(
+                            'Built an IM service based on Netty, supporting private chat, group chat, and message read receipts. Adopted WebSocket long connection + message queue architecture to ensure message real-time delivery and reliability.',
+                            '基于 Netty 构建的 IM 服务，支持私聊、群聊、消息已读等核心功能。采用 WebSocket 长连接 + 消息队列架构，保证消息实时性和可靠性。'
+                        ),
                         tags: ['Netty', 'WebSocket', 'Redis', 'Protobuf'],
                         metrics: [
-                            { value: '5W+', label: '在线用户' },
-                            { value: '20ms', label: '平均延迟' }
+                            { value: '5W+', label: _t('Online Users', '在线用户') },
+                            { value: '20ms', label: _t('Avg Latency', '平均延迟') }
                         ]
                     },
                     {
                         icon: 'ri-search-eye-fill',
-                        title: '风控预警系统',
-                        desc: '实时风控检测系统，支持规则动态配置与热更新。通过规则引擎 + 特征库实现反欺诈、反刷单等场景，有效识别异常行为。',
-                        tags: ['Drools', 'Redis', 'MySQL', '定时任务'],
+                        title: _t('Risk Control System', '风控预警系统'),
+                        desc: _t(
+                            'Real-time risk detection system supporting dynamic rule configuration and hot reloading. Implements anti-fraud and anti-scalping scenarios through rule engine + feature library, effectively identifying abnormal behavior.',
+                            '实时风控检测系统，支持规则动态配置与热更新。通过规则引擎 + 特征库实现反欺诈、反刷单等场景，有效识别异常行为。'
+                        ),
+                        tags: ['Drools', 'Redis', 'MySQL', _t('Cron Jobs', '定时任务')],
                         metrics: [
-                            { value: '1亿+', label: '日检测量' },
-                            { value: '<100ms', label: '响应时间' }
+                            { value: '100M+', label: _t('Daily Detections', '日检测量') },
+                            { value: '<100ms', label: _t('Response Time', '响应时间') }
                         ]
                     },
                     {
                         icon: 'ri-cloud-fill',
-                        title: '微服务基础架构',
-                        desc: '搭建公司微服务基础设施，包括统一网关、配置中心、链路追踪、日志收集等。基于 Spring Cloud Alibaba 体系，支撑业务服务数量持续增长。',
+                        title: _t('Microservice Infrastructure', '微服务基础架构'),
+                        desc: _t(
+                            'Built company microservice infrastructure including unified gateway, configuration center, distributed tracing, and log aggregation. Based on Spring Cloud Alibaba ecosystem, supporting continuous growth of business services.',
+                            '搭建公司微服务基础设施，包括统一网关、配置中心、链路追踪、日志收集等。基于 Spring Cloud Alibaba 体系，支撑业务服务数量持续增长。'
+                        ),
                         tags: ['Spring Cloud', 'Nacos', 'Sentinel', 'SkyWalking'],
                         metrics: [
-                            { value: '50+', label: '服务数量' },
-                            { value: '统一治理', label: '运维体系' }
+                            { value: '50+', label: _t('Services', '服务数量') },
+                            { value: _t('Unified Governance', '统一治理'), label: _t('Ops System', '运维体系') }
                         ]
                     }
                 ]);
 
                 // ===== 工作经历 =====
-                const experience = ref([
-                    { date: '2023 - 至今', title: '遥感科学与技术本科生', company: '中南大学', desc: '学习遥感专业知识，探索AI+遥感的各种应用和方法' },
-                    { date: '2020 - 2023', title: '高中学习', company: '安徽省黄山市祁门县第一中学', desc: '主要学习数理基础以及英语基础' }
+                const experience = computed(() => [
+                    { date: '2023 - ' + _t('Present', '至今'), title: _t('Undergraduate in Remote Sensing Science and Technology', '遥感科学与技术本科生'), company: _t('Central South University', '中南大学'), desc: _t('Studying remote sensing expertise, exploring various applications and methods of AI + remote sensing.', '学习遥感专业知识，探索AI+遥感的各种应用和方法') },
+                    { date: '2020 - 2023', title: _t('High School Studies', '高中学习'), company: _t('Qimen No.1 Middle School, Huangshan, Anhui', '安徽省黄山市祁门县第一中学'), desc: _t('Mainly studied mathematics, physics, and English fundamentals.', '主要学习数理基础以及英语基础') }
                 ]);
 
                 // ===== 新闻动态 =====
-                const news = ref([
+                const news = computed(() => [
                     {
                         icon: 'ri-trophy-line',
                         date: '2025.06',
-                        title: '全国大学生遥感应用创新大赛一等奖',
-                        venue: '中国遥感应用协会',
-                        desc: '基于多模态遥感影像的智能解译方法研究，提出融合视觉-语言模型的遥感图像理解框架，在精度和效率上均取得显著提升。',
-                        tags: ['竞赛获奖', '遥感', '深度学习']
+                        title: _t(
+                            'Grand Prize in UAV Low-Altitude Data Processing, 18th CSU Surveying Innovation Competition — Heading to Lanzhou Nationals!',
+                            '中南大学第十八届大学生测绘学科创新创业智能大赛低空无人机数据处理赛项特等奖,国赛兰州见！'
+                        ),
+                        venue: _t('China Association of Remote Sensing Application, China Society of Surveying and Mapping', '中国遥感应用协会，中国测绘协会'),
+                        desc: _t(
+                            'Awarded the Grand Prize for innovative methods and outstanding performance in low-altitude UAV data processing, and will represent the university at the national competition in Lanzhou.',
+                            '凭借在低空无人机数据处理方面的创新方法和出色表现，荣获特等奖，并将代表学校参加国赛兰州站的角逐。'
+                        ),
+                        tags: [_t('Award', '奖状'), _t('Remote Sensing', '遥感'), _t('Data Processing', '数据处理')]
                     },
                     {
                         icon: 'ri-file-text-line',
-                        date: '2025.03',
-                        title: 'Remote Sensing Image Captioning via Vision-Language Models',
-                        venue: 'IEEE Transactions on Geoscience and Remote Sensing (Under Review)',
-                        desc: '提出一种面向遥感图像的视觉-语言描述生成方法，结合地理空间先验知识增强模型对遥感场景的理解能力。',
-                        tags: ['论文', 'VLM', 'Remote Sensing']
+                        date: '2025.06',
+                        title: _t(
+                            'GeoTarget: A Lightweight Visual Grounding Method for UAV Vision-Language Navigation',
+                            'GeoTarget：面向无人机视觉语言导航的轻量化目标定位方法'
+                        ),
+                        venue: _t(
+                            'First Prize in Surveying Science & Technology Paper, 18th CSU Surveying Innovation Competition — Heading to Wuhan Nationals!',
+                            '中南大学第十八届大学生测绘学科创新创业智能大赛测绘科技论文一等奖,国赛武汉见！'
+                        ),
+                        desc: _t(
+                            'Proposed GeoTarget, a lightweight vision-language model for UAV visual grounding. GeoTarget predicts target positions and integrates UAV pose, map geometry, and depth information to map 2D predictions into 3D world coordinates, providing target priors for downstream path planning and flight control.',
+                            '提出GeoTarget，一个面向无人机视觉语言导航目标定位的轻量化视觉语言模型，GeoTarget预测目标位置，结合无人机位姿、地图几何与深度信息，将二维预测位置映射为三维世界坐标，为后续路径规划与飞行控制提供目标先验。'
+                        ),
+                        tags: [_t('Award', '奖状'), _t('Paper', '论文'), 'VLM', 'Remote Sensing']
                     },
                     {
                         icon: 'ri-trophy-line',
-                        date: '2024.11',
-                        title: '中南大学优秀学生奖学金',
-                        venue: '中南大学',
-                        desc: '因学业成绩优异、科研表现突出获得校级优秀学生奖学金。',
-                        tags: ['奖学金', '荣誉']
+                        date: '2025.12',
+                        title: _t(
+                            'Outstanding Student Cadre, School of Geosciences and Info-Physics, CSU',
+                            '中南大学地球科学与信息物理学院优秀学生干部'
+                        ),
+                        venue: _t('Central South University', '中南大学'),
+                        desc: _t('Received the college-level Outstanding Student Cadre award.', '获得院级优秀学生干部称号'),
+                        tags: [_t('Award', '奖状'), _t('Honor', '荣誉')]
                     },
                     {
                         icon: 'ri-file-text-line',
-                        date: '2024.09',
-                        title: '计算机视觉与模式识别在遥感图像中的应用综述',
-                        venue: '遥感学报 (已投稿)',
-                        desc: '系统综述了计算机视觉与模式识别技术在遥感图像分类、目标检测、语义分割等任务中的最新进展与挑战。',
-                        tags: ['综述', '计算机视觉', '模式识别']
+                        date: '2025.12',
+                        title: _t('Third-Class Academic Scholarship, CSU', '中南大学学年三等奖学金'),
+                        venue: _t('Central South University', '中南大学'),
+                        desc: _t('Received the third-class academic scholarship for the academic year.', '获得学年三等奖学金'),
+                        tags: [_t('Award', '奖状'), _t('Honor', '荣誉')]
                     }
                 ]);
 
                 // ===== 统计数据 =====
-                const stats = ref([
-                    { value: '5', label: '年研发经验' },
-                    { value: '50+', label: '技术博客' },
-                    { value: '100W+', label: '代码行数' },
-                    { value: '', label: '访客数', id: 'busuanzi_value_site_uv' }
+                const stats = computed(() => [
+                    { value: '3', label: _t('Years of Study', '年学习时间') },
+                    { value: '5W+', label: _t('Lines of Code', '代码行数') },
+                    { value: '', label: _t('Visitors', '访客数'), id: 'busuanzi_value_site_uv' }
                 ]);
 
                 // ===== 资源链接 =====
-                const resourceLinks = ref([
-                    { name: 'LeetCode', icon: 'ri-code-box-line', url: 'https://leetcode-cn.com/problemset/all/', desc: '算法训练' },
-                    { name: '剑指 Offer', icon: 'ri-book-open-line', url: 'https://www.nowcoder.com/ta/coding-interviews', desc: '面试宝典' },
-                    { name: 'GitHub', icon: 'ri-github-fill', url: 'https://github.com/', desc: '开源社区' }
+                const resourceLinks = computed(() => [
+                    { name: 'LeetCode', icon: 'ri-code-box-line', url: 'https://leetcode-cn.com/problemset/all/', desc: _t('Algorithm Practice', '算法训练') },
+                    { name: _t('Coding Interviews', '剑指 Offer'), icon: 'ri-book-open-line', url: 'https://www.nowcoder.com/ta/coding-interviews', desc: _t('Interview Guide', '面试宝典') },
+                    { name: 'GitHub', icon: 'ri-github-fill', url: 'https://github.com/', desc: _t('Open Source Community', '开源社区') }
                 ]);
 
                 // ===== 动态数据 =====
                 const typedText = ref('');
-                const hitokoto = ref('加载中...');
-                const poetry = ref('加载中...');
+                const hitokoto = ref(_t('Loading...', '加载中...'));
+                const poetry = ref(_t('Loading...', '加载中...'));
                 const currentYear = computed(() => new Date().getFullYear());
 
                 // ===== 可见区域状态 =====
@@ -444,8 +493,13 @@
                 });
 
                 // ===== 打字效果 =====
+                let typeTimer = null;
                 const typeWriter = () => {
-                    const texts = ['架构改变世界', 'Code is Poetry', 'Stay Hungry, Stay Foolish', '高并发 · 高可用 · 高扩展'];
+                    if (typeTimer) clearTimeout(typeTimer);
+                    typedText.value = '';
+                    const texts = lang.value === 'en'
+                        ? ['Architecture Changes the World', 'Code is Poetry', 'Stay Hungry, Stay Foolish', 'High Concurrency · High Availability · High Scalability']
+                        : ['架构改变世界', 'Code is Poetry', 'Stay Hungry, Stay Foolish', '高并发 · 高可用 · 高扩展'];
                     let textIndex = 0, charIndex = 0, isDeleting = false;
 
                     const type = () => {
@@ -453,7 +507,7 @@
                         typedText.value = isDeleting ? current.substring(0, --charIndex) : current.substring(0, ++charIndex);
 
                         if (!isDeleting && charIndex === current.length) {
-                            setTimeout(type, 2000);
+                            typeTimer = setTimeout(type, 2000);
                             isDeleting = true;
                             return;
                         }
@@ -461,7 +515,7 @@
                             isDeleting = false;
                             textIndex = (textIndex + 1) % texts.length;
                         }
-                        setTimeout(type, isDeleting ? 35 : 75);
+                        typeTimer = setTimeout(type, isDeleting ? 35 : 75);
                     };
                     type();
                 };
@@ -570,7 +624,7 @@
                     fetch('https://v1.hitokoto.cn')
                         .then(r => r.json())
                         .then(d => { hitokoto.value = d.hitokoto + ' —— ' + (d.from || ''); })
-                        .catch(() => { hitokoto.value = '代码如诗，人生如歌。'; });
+                        .catch(() => { hitokoto.value = _t('Code is poetry, life is a song.', '代码如诗，人生如歌。'); });
 
                     // 诗词
                     const js = document.createElement('script');
@@ -587,7 +641,19 @@
                     document.body.appendChild(bs);
                 };
 
+                // ===== 更新页面标题 =====
+                const updateTitle = () => {
+                    document.title = _t('Yuyang Wu | Senior Backend Engineer', '吴雨阳 | 高级后端工程师');
+                };
+
+                // ===== 语言切换监听 =====
+                watch(lang, () => {
+                    typeWriter();
+                    updateTitle();
+                });
+
                 onMounted(() => {
+                    updateTitle();
                     typeWriter();
                     initParticles();
                     initScrollObserver();
@@ -595,13 +661,18 @@
 
                     // 标签页切换
                     document.addEventListener('visibilitychange', () => {
-                        document.title = document.hidden ? '(๑•́ ₃•̀) ' : `${site.name} | Senior Backend Engineer`;
+                        if (document.hidden) {
+                            document.title = _t('(◕‿◕) Come back!', '(๑•́ ₃•̀) 别走呀');
+                        } else {
+                            updateTitle();
+                        }
                     });
 
-                    console.log(`%c⚡ ${site.name} - 探索未知`, 'color:#58a6ff;font-size:16px;font-weight:bold');
+                    console.log(`%c⚡ ${site.value.name} - ${_t('Explore the unknown', '探索未知')}`, 'color:#58a6ff;font-size:16px;font-weight:bold');
                 });
 
                 return {
+                    lang, _t, toggleLang,
                     site, navLinks, profile, socialLinks, about, skills, projects,
                     experience, news, stats, resourceLinks, typedText, hitokoto, poetry,
                     currentYear, visibleSections

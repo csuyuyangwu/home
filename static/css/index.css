@@ -71,6 +71,26 @@ body {
 .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
 .nav-links a:hover { color: var(--accent); }
 
+/* ===== Language Toggle ===== */
+.lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: all 0.25s;
+    white-space: nowrap;
+    font-family: inherit;
+}
+.lang-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.lang-toggle i { font-size: 0.85rem; }
+
 /* ===== Hero ===== */
 .hero {
     min-height: 100vh;
