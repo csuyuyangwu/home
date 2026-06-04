@@ -219,7 +219,7 @@
             setup() {
                 // ===== 站点配置 =====
                 const site = reactive({
-                    name: '未寻',
+                    name: '吴雨阳',
                     slogan: '探索未知，代码为舟'
                 });
 
@@ -535,7 +535,7 @@
 
                     // 标签页切换
                     document.addEventListener('visibilitychange', () => {
-                        document.title = document.hidden ? '(๑•́ ₃•̀) 页面走丢了' : `${site.name} | Senior Backend Engineer`;
+                        document.title = document.hidden ? '(๑•́ ₃•̀) ' : `${site.name} | Senior Backend Engineer`;
                     });
 
                     console.log(`%c⚡ ${site.name} - 探索未知`, 'color:#58a6ff;font-size:16px;font-weight:bold');
