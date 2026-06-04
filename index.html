@@ -145,6 +145,29 @@
                     </div>
                 </section>
 
+                <!-- News -->
+                <section id="news" class="section" :class="{ visible: visibleSections.news }">
+                    <div class="section-header">
+                        <i class="ri-newspaper-line"></i>
+                        <h2>News & Achievements</h2>
+                        <span class="section-line"></span>
+                    </div>
+                    <div class="news-grid">
+                        <div v-for="item in news" :key="item.title" class="news-card">
+                            <div class="news-date">
+                                <i :class="item.icon"></i>
+                                {{ item.date }}
+                            </div>
+                            <h3>{{ item.title }}</h3>
+                            <p class="news-venue">{{ item.venue }}</p>
+                            <p class="news-desc">{{ item.desc }}</p>
+                            <div class="news-tags">
+                                <span v-for="tag in item.tags" :key="tag">{{ tag }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Stats -->
                 <section id="stats" class="section section-stats" :class="{ visible: visibleSections.stats }">
                     <div class="stats-grid">
@@ -229,6 +252,7 @@
                     { id: 'skills', title: '技术栈' },
                     { id: 'projects', title: '项目' },
                     { id: 'experience', title: '经历' },
+                    { id: 'news', title: '动态' },
                     { id: 'contact', title: '联系' }
                 ]);
 
@@ -356,6 +380,42 @@
                     { date: '2020 - 2023', title: '高中学习', company: '安徽省黄山市祁门县第一中学', desc: '主要学习数理基础以及英语基础' }
                 ]);
 
+                // ===== 新闻动态 =====
+                const news = ref([
+                    {
+                        icon: 'ri-trophy-line',
+                        date: '2025.06',
+                        title: '全国大学生遥感应用创新大赛一等奖',
+                        venue: '中国遥感应用协会',
+                        desc: '基于多模态遥感影像的智能解译方法研究，提出融合视觉-语言模型的遥感图像理解框架，在精度和效率上均取得显著提升。',
+                        tags: ['竞赛获奖', '遥感', '深度学习']
+                    },
+                    {
+                        icon: 'ri-file-text-line',
+                        date: '2025.03',
+                        title: 'Remote Sensing Image Captioning via Vision-Language Models',
+                        venue: 'IEEE Transactions on Geoscience and Remote Sensing (Under Review)',
+                        desc: '提出一种面向遥感图像的视觉-语言描述生成方法，结合地理空间先验知识增强模型对遥感场景的理解能力。',
+                        tags: ['论文', 'VLM', 'Remote Sensing']
+                    },
+                    {
+                        icon: 'ri-trophy-line',
+                        date: '2024.11',
+                        title: '中南大学优秀学生奖学金',
+                        venue: '中南大学',
+                        desc: '因学业成绩优异、科研表现突出获得校级优秀学生奖学金。',
+                        tags: ['奖学金', '荣誉']
+                    },
+                    {
+                        icon: 'ri-file-text-line',
+                        date: '2024.09',
+                        title: '计算机视觉与模式识别在遥感图像中的应用综述',
+                        venue: '遥感学报 (已投稿)',
+                        desc: '系统综述了计算机视觉与模式识别技术在遥感图像分类、目标检测、语义分割等任务中的最新进展与挑战。',
+                        tags: ['综述', '计算机视觉', '模式识别']
+                    }
+                ]);
+
                 // ===== 统计数据 =====
                 const stats = ref([
                     { value: '5', label: '年研发经验' },
@@ -380,7 +440,7 @@
                 // ===== 可见区域状态 =====
                 const visibleSections = reactive({
                     about: false, skills: false, projects: false,
-                    experience: false, stats: false, poetry: false, links: false
+                    experience: false, news: false, stats: false, poetry: false, links: false
                 });
 
                 // ===== 打字效果 =====
@@ -543,7 +603,7 @@
 
                 return {
                     site, navLinks, profile, socialLinks, about, skills, projects,
-                    experience, stats, resourceLinks, typedText, hitokoto, poetry,
+                    experience, news, stats, resourceLinks, typedText, hitokoto, poetry,
                     currentYear, visibleSections
                 };
             }
