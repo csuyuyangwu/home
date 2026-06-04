@@ -80,31 +80,6 @@
                     </div>
                 </section>
 
-                <!-- Skills -->
-                <section id="skills" class="section" :class="{ visible: visibleSections.skills }">
-                    <div class="section-header">
-                        <i class="ri-stack-line"></i>
-                        <h2>{{ tt('Technology Stack', '技术栈') }}</h2>
-                        <span class="section-line"></span>
-                    </div>
-                    <div class="tech-categories">
-                        <div v-for="category in skills" :key="category.name" class="tech-category">
-                            <h3><i :class="category.icon"></i> {{ category.name }}</h3>
-                            <div class="tech-items">
-                                <div v-for="item in category.items" :key="item.name" class="tech-item"
-                                    :data-level="item.level">
-                                    <span class="tech-name">{{ item.name }}</span>
-                                    <div class="tech-bar">
-                                        <div class="tech-progress"
-                                            :style="{ width: visibleSections.skills ? item.level + '%' : 0 }"></div>
-                                    </div>
-                                    <span class="tech-level">{{ item.levelName }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 <!-- Projects -->
                 <section id="projects" class="section" :class="{ visible: visibleSections.projects }">
                     <div class="section-header">
@@ -213,6 +188,32 @@
                             <span>{{ link.name }}</span>
                             <p>{{ link.desc }}</p>
                         </a>
+                    </div>
+                </section>
+                <!-- Moments -->
+                <section id="moments" class="section" :class="{ visible: visibleSections.moments }">
+                    <div class="section-header">
+                        <i class="ri-image-line"></i>
+                        <h2>{{ tt('Moments', '生活瞬间') }}</h2>
+                        <span class="section-line"></span>
+                    </div>
+                    <div class="moments-carousel" @mouseenter="pauseCarousel" @mouseleave="resumeCarousel">
+                        <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+                            <div v-for="(img, i) in momentPhotos" :key="i" class="carousel-slide">
+                                <img :src="img" :alt="'Moment ' + (i + 1)">
+                            </div>
+                        </div>
+                        <button class="carousel-btn carousel-prev" @click="prevSlide">
+                            <i class="ri-arrow-left-s-line"></i>
+                        </button>
+                        <button class="carousel-btn carousel-next" @click="nextSlide">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                        <div class="carousel-dots">
+                            <span v-for="(img, i) in momentPhotos" :key="i"
+                                :class="{ active: currentSlide === i }"
+                                @click="currentSlide = i"></span>
+                        </div>
                     </div>
                 </section>
             </main>
@@ -327,10 +328,10 @@
                 // ===== 导航链接 =====
                 const navLinks = ref([
                     { id: 'about', title: 'About' },
-                    { id: 'skills', title: 'Skills' },
                     { id: 'projects', title: 'Projects' },
                     { id: 'experience', title: 'Experience' },
                     { id: 'news', title: 'News' },
+                    { id: 'moments', title: 'Moments' },
                     { id: 'contact', title: 'Contact' }
                 ]);
 
@@ -362,50 +363,6 @@
                         { icon: 'ri-scan-line', title: 'Remote Sensing Interpretation', desc: 'Interested in applying deep learning to automated land cover classification and change detection.' }
                     ]
                 });
-
-                // ===== 技术栈 =====
-                const skills = ref([
-                    {
-                        name: 'Programming Languages',
-                        icon: 'ri-code-s-fill',
-                        items: [
-                            { name: 'Java', level: 95, levelName: 'Expert' },
-                            { name: 'Python', level: 75, levelName: 'Proficient' },
-                            { name: 'Go', level: 65, levelName: 'Skilled' },
-                            { name: 'TypeScript', level: 65, levelName: 'Skilled' }
-                        ]
-                    },
-                    {
-                        name: 'Backend Frameworks',
-                        icon: 'ri-leaf-fill',
-                        items: [
-                            { name: 'Spring Boot / Cloud', level: 95, levelName: 'Expert' },
-                            { name: 'Dubbo / gRPC', level: 85, levelName: 'Proficient' },
-                            { name: 'MyBatis / JPA', level: 85, levelName: 'Proficient' },
-                            { name: 'Netty / Vert.x', level: 70, levelName: 'Skilled' }
-                        ]
-                    },
-                    {
-                        name: 'Data Storage',
-                        icon: 'ri-database-fill',
-                        items: [
-                            { name: 'MySQL', level: 90, levelName: 'Expert' },
-                            { name: 'Redis', level: 90, levelName: 'Expert' },
-                            { name: 'Elasticsearch', level: 75, levelName: 'Proficient' },
-                            { name: 'MongoDB / ClickHouse', level: 65, levelName: 'Skilled' }
-                        ]
-                    },
-                    {
-                        name: 'Middleware & DevOps',
-                        icon: 'ri-tools-fill',
-                        items: [
-                            { name: 'Kafka / RabbitMQ', level: 85, levelName: 'Proficient' },
-                            { name: 'Docker / K8s', level: 80, levelName: 'Proficient' },
-                            { name: 'Jenkins / GitLab CI', level: 75, levelName: 'Proficient' },
-                            { name: 'Prometheus / Grafana', level: 70, levelName: 'Skilled' }
-                        ]
-                    }
-                ]);
 
                 // ===== 项目经验 =====
                 const projects = ref([
@@ -486,10 +443,10 @@
                         name: { en: 'Yuyang Wu', zh: '吴雨阳' },
                         slogan: { en: 'Explore the unknown, code as the vessel', zh: '探索未知，代码为舟' }
                     },
-                    navKeys: ['about', 'skills', 'projects', 'experience', 'news', 'contact'],
+                    navKeys: ['about', 'projects', 'experience', 'news', 'moments', 'contact'],
                     navTitles: {
-                        en: ['About', 'Skills', 'Projects', 'Experience', 'News', 'Contact'],
-                        zh: ['关于', '技术栈', '项目', '经历', '动态', '联系']
+                        en: ['About', 'Projects', 'Experience', 'News', 'Moments', 'Contact'],
+                        zh: ['关于', '项目', '经历', '动态', '瞬间', '联系']
                     },
                     profile: {
                         name: { en: 'Yuyang Wu', zh: '吴雨阳' },
@@ -516,11 +473,6 @@
                             { en: { title: 'Remote Sensing Interpretation', desc: 'Interested in applying deep learning to automated land cover classification and change detection.' }, zh: { title: '遥感智能解译', desc: '对深度学习驱动的地物分类与变化检测感兴趣。' } }
                         ]
                     },
-                    skillCats: {
-                        en: ['Programming Languages', 'Backend Frameworks', 'Data Storage', 'Middleware & DevOps'],
-                        zh: ['编程语言', '后端框架', '数据存储', '中间件与运维']
-                    },
-                    levelNames: { en: ['Expert', 'Proficient', 'Skilled'], zh: ['精通', '熟练', '掌握'] },
                     projects: [
                         {
                             en: { title: 'FastViewGen', desc: 'FastViewGen: Fast Overviews Generator for Large Satellite Images. A project that generates fast overviews for PANCHROMATIC and MULTISPECTRAL satellite images of a maximum size of 4GB with adaptive color adjustment.' },
@@ -574,17 +526,6 @@
                         card.desc = i18n.about.cards[i][L].desc;
                     });
 
-                    // skills
-                    skills.value.forEach((cat, i) => {
-                        cat.name = i18n.skillCats[L][i];
-                        cat.items.forEach(item => {
-                            const lvl = item.level;
-                            if (lvl >= 90) item.levelName = i18n.levelNames[L][0];
-                            else if (lvl >= 75) item.levelName = i18n.levelNames[L][1];
-                            else item.levelName = i18n.levelNames[L][2];
-                        });
-                    });
-
                     // projects
                     projects.value.forEach((proj, i) => {
                         const d = i18n.projects[i][L];
@@ -625,6 +566,31 @@
                     updateTitle();
                 }
 
+                // ===== 照片轮播 =====
+                const momentPhotos = ref([
+                    'static/img/moments/1.jpg',
+                    'static/img/moments/2.jpg',
+                    'static/img/moments/3.jpg'
+                ]);
+                const currentSlide = ref(0);
+                let carouselTimer = null;
+
+                function nextSlide() {
+                    currentSlide.value = (currentSlide.value + 1) % momentPhotos.value.length;
+                }
+                function prevSlide() {
+                    currentSlide.value = (currentSlide.value - 1 + momentPhotos.value.length) % momentPhotos.value.length;
+                }
+                function startCarousel() {
+                    carouselTimer = setInterval(nextSlide, 4000);
+                }
+                function pauseCarousel() {
+                    if (carouselTimer) clearInterval(carouselTimer);
+                }
+                function resumeCarousel() {
+                    startCarousel();
+                }
+
                 // ===== 动态数据 =====
                 const typedText = ref('');
                 const hitokoto = ref('Loading...');
@@ -633,8 +599,8 @@
 
                 // ===== 可见区域状态 =====
                 const visibleSections = reactive({
-                    about: false, skills: false, projects: false,
-                    experience: false, news: false, stats: false, poetry: false, links: false
+                    about: false, projects: false,
+                    experience: false, news: false, moments: false, stats: false, poetry: false, links: false
                 });
 
                 // ===== 打字效果 =====
@@ -803,6 +769,7 @@
                     initParticles();
                     initScrollObserver();
                     loadExternalData();
+                    startCarousel();
 
                     // 标签页切换
                     document.addEventListener('visibilitychange', () => {
@@ -819,9 +786,10 @@
                 return {
                     lang, tt, toggleLang, showWechat, openWechat, closeWechat,
                     showEmail, openEmail, closeEmail, isSpecialLink, handleSocialClick,
-                    site, navLinks, profile, socialLinks, about, skills, projects,
+                    site, navLinks, profile, socialLinks, about, projects,
                     experience, news, stats, resourceLinks, typedText, hitokoto, poetry,
-                    currentYear, visibleSections
+                    momentPhotos, currentSlide, nextSlide, prevSlide,
+                    pauseCarousel, resumeCarousel, currentYear, visibleSections
                 };
             }
         }).mount('#app');
