@@ -113,20 +113,22 @@
                         <span class="section-line"></span>
                     </div>
                     <div class="projects-grid">
-                        <div v-for="project in projects" :key="project.title" class="project-card">
-                            <div class="project-header">
-                                <i :class="project.icon"></i>
-                                <h3>{{ project.title }}</h3>
-                            </div>
-                            <p class="project-desc">{{ project.desc }}</p>
-                            <div class="project-tags">
-                                <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
-                            </div>
-                            <div class="project-metrics">
-                                <div v-for="metric in project.metrics" :key="metric.label" class="metric">
-                                    <span class="metric-value">{{ metric.value }}</span>
-                                    <span class="metric-label">{{ metric.label }}</span>
+                        <div v-for="project in projects" :key="project.title" class="project-card project-featured">
+                            <div class="project-info">
+                                <div class="project-header">
+                                    <i :class="project.icon"></i>
+                                    <h3>{{ project.title }}</h3>
                                 </div>
+                                <p class="project-desc">{{ project.desc }}</p>
+                                <div class="project-tags">
+                                    <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
+                                </div>
+                                <a :href="project.github" target="_blank" class="project-link">
+                                    <i class="ri-github-fill"></i> {{ tt('View Project', '查看项目') }}
+                                </a>
+                            </div>
+                            <div class="project-image">
+                                <img :src="project.image" :alt="project.title" @error="e => e.target.style.display='none'">
                             </div>
                         </div>
                     </div>
@@ -405,44 +407,12 @@
                 // ===== 项目经验 =====
                 const projects = ref([
                     {
-                        icon: 'ri-shopping-bag-fill',
-                        title: 'E-Commerce Trading System',
-                        desc: 'Responsible for core trading chain development, covering order system, inventory management, and payment integration. Improved system performance through Redis cache optimization and async peak-shaving, ensuring stable operation during peak sales periods.',
-                        tags: ['Spring Boot', 'MySQL', 'Redis', 'RabbitMQ'],
-                        metrics: [
-                            { value: '10W+', label: 'Daily Orders' },
-                            { value: '99.9%', label: 'Availability' }
-                        ]
-                    },
-                    {
-                        icon: 'ri-flashlight-fill',
-                        title: 'Instant Messaging Service',
-                        desc: 'Built an IM service based on Netty, supporting private chat, group chat, and message read receipts. Adopted WebSocket long connection + message queue architecture to ensure message real-time delivery and reliability.',
-                        tags: ['Netty', 'WebSocket', 'Redis', 'Protobuf'],
-                        metrics: [
-                            { value: '5W+', label: 'Online Users' },
-                            { value: '20ms', label: 'Avg Latency' }
-                        ]
-                    },
-                    {
-                        icon: 'ri-search-eye-fill',
-                        title: 'Risk Control System',
-                        desc: 'Real-time risk detection system supporting dynamic rule configuration and hot reloading. Implements anti-fraud and anti-scalping scenarios through rule engine + feature library, effectively identifying abnormal behavior.',
-                        tags: ['Drools', 'Redis', 'MySQL', 'Cron Jobs'],
-                        metrics: [
-                            { value: '100M+', label: 'Daily Detections' },
-                            { value: '<100ms', label: 'Response Time' }
-                        ]
-                    },
-                    {
-                        icon: 'ri-cloud-fill',
-                        title: 'Microservice Infrastructure',
-                        desc: 'Built company microservice infrastructure including unified gateway, configuration center, distributed tracing, and log aggregation. Based on Spring Cloud Alibaba ecosystem, supporting continuous growth of business services.',
-                        tags: ['Spring Cloud', 'Nacos', 'Sentinel', 'SkyWalking'],
-                        metrics: [
-                            { value: '50+', label: 'Services' },
-                            { value: 'Unified Governance', label: 'Ops System' }
-                        ]
+                        icon: 'ri-satellite-line',
+                        title: 'FastViewGen',
+                        desc: 'FastViewGen: Fast Overviews Generator for Large Satellite Images. A project that generates fast overviews for PANCHROMATIC and MULTISPECTRAL satellite images of a maximum size of 4GB with adaptive color adjustment.',
+                        tags: ['Python', 'Remote Sensing', 'GDAL', 'Satellite Imagery'],
+                        github: 'https://donaldtrump-coder.github.io/FastViewGen/',
+                        image: 'static/img/fastviewgen-overview.png'
                     }
                 ]);
 
@@ -546,20 +516,8 @@
                     levelNames: { en: ['Expert', 'Proficient', 'Skilled'], zh: ['精通', '熟练', '掌握'] },
                     projects: [
                         {
-                            en: { title: 'E-Commerce Trading System', desc: 'Responsible for core trading chain development, covering order system, inventory management, and payment integration. Improved system performance through Redis cache optimization and async peak-shaving, ensuring stable operation during peak sales periods.', tag4: 'RabbitMQ', m1l: 'Daily Orders', m2l: 'Availability' },
-                            zh: { title: '电商交易系统', desc: '负责核心交易链路开发，涵盖订单系统、库存管理、支付对接等模块。通过 Redis 缓存优化、异步削峰等手段提升系统性能，保障大促期间系统稳定运行。', tag4: 'RabbitMQ', m1l: '日均订单', m2l: '可用性' }
-                        },
-                        {
-                            en: { title: 'Instant Messaging Service', desc: 'Built an IM service based on Netty, supporting private chat, group chat, and message read receipts. Adopted WebSocket long connection + message queue architecture to ensure message real-time delivery and reliability.', tag4: 'Protobuf', m1l: 'Online Users', m2l: 'Avg Latency' },
-                            zh: { title: '即时通讯服务', desc: '基于 Netty 构建的 IM 服务，支持私聊、群聊、消息已读等核心功能。采用 WebSocket 长连接 + 消息队列架构，保证消息实时性和可靠性。', tag4: 'Protobuf', m1l: '在线用户', m2l: '平均延迟' }
-                        },
-                        {
-                            en: { title: 'Risk Control System', desc: 'Real-time risk detection system supporting dynamic rule configuration and hot reloading. Implements anti-fraud and anti-scalping scenarios through rule engine + feature library, effectively identifying abnormal behavior.', tag4: 'Cron Jobs', m1l: 'Daily Detections', m2l: 'Response Time' },
-                            zh: { title: '风控预警系统', desc: '实时风控检测系统，支持规则动态配置与热更新。通过规则引擎 + 特征库实现反欺诈、反刷单等场景，有效识别异常行为。', tag4: '定时任务', m1l: '日检测量', m2l: '响应时间' }
-                        },
-                        {
-                            en: { title: 'Microservice Infrastructure', desc: 'Built company microservice infrastructure including unified gateway, configuration center, distributed tracing, and log aggregation. Based on Spring Cloud Alibaba ecosystem, supporting continuous growth of business services.', tag4: 'SkyWalking', m1l: 'Services', m2l: 'Ops System', m1v: '50+', m2v: 'Unified Governance' },
-                            zh: { title: '微服务基础架构', desc: '搭建公司微服务基础设施，包括统一网关、配置中心、链路追踪、日志收集等。基于 Spring Cloud Alibaba 体系，支撑业务服务数量持续增长。', tag4: 'SkyWalking', m1l: '服务数量', m2l: '运维体系', m1v: '50+', m2v: '统一治理' }
+                            en: { title: 'FastViewGen', desc: 'FastViewGen: Fast Overviews Generator for Large Satellite Images. A project that generates fast overviews for PANCHROMATIC and MULTISPECTRAL satellite images of a maximum size of 4GB with adaptive color adjustment.' },
+                            zh: { title: 'FastViewGen', desc: 'FastViewGen：大型卫星影像快速概览生成器。支持最大4GB的全色和多光谱卫星影像快速概览生成，具备自适应色彩调整功能。' }
                         }
                     ],
                     experience: [
@@ -625,11 +583,6 @@
                         const d = i18n.projects[i][L];
                         proj.title = d.title;
                         proj.desc = d.desc;
-                        proj.tags[3] = d.tag4;
-                        proj.metrics[0].label = d.m1l;
-                        proj.metrics[1].label = d.m2l;
-                        if (d.m1v) proj.metrics[0].value = d.m1v;
-                        if (d.m2v) proj.metrics[1].value = d.m2v;
                     });
 
                     // experience
