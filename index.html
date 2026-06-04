@@ -123,6 +123,10 @@
                                 <div class="project-tags">
                                     <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
                                 </div>
+                                <div class="project-authors">
+                                    <span class="authors-label">{{ tt('Authors', '作者') }}:</span>
+                                    <a v-for="author in project.authors" :key="author.name" :href="author.url" target="_blank" class="author-link">{{ author.name }}</a>
+                                </div>
                                 <a :href="project.github" target="_blank" class="project-link">
                                     <i class="ri-github-fill"></i> {{ tt('View Project', '查看项目') }}
                                 </a>
@@ -411,7 +415,12 @@
                         desc: 'FastViewGen: Fast Overviews Generator for Large Satellite Images. A project that generates fast overviews for PANCHROMATIC and MULTISPECTRAL satellite images of a maximum size of 4GB with adaptive color adjustment.',
                         tags: ['Python', 'Remote Sensing', 'GDAL', 'Satellite Imagery'],
                         github: 'https://donaldtrump-coder.github.io/FastViewGen/',
-                        image: 'static/img/fastviewgen-overview.png'
+                        image: 'static/img/fastviewgen-overview.png',
+                        authors: [
+                            { name: '唐浩珺', url: 'https://donaldtrump-coder.github.io/' },
+                            { name: '吴雨阳', url: 'https://github.com/csuyuyangwu' },
+                            { name: '周家豪', url: 'https://github.com/Jeiluo' }
+                        ]
                     }
                 ]);
 
