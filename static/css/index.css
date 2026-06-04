@@ -312,39 +312,44 @@ body {
 /* ===== Moments Carousel ===== */
 .moments-carousel {
     position: relative;
-    overflow: hidden;
     border-radius: var(--radius);
     background: var(--bg-card);
     border: 1px solid var(--border);
 }
 .carousel-track {
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    gap: 0.8rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 0.8rem;
+    scrollbar-width: none;
 }
+.carousel-track::-webkit-scrollbar { display: none; }
 .carousel-slide {
-    flex: 0 0 100%;
-    aspect-ratio: 16 / 9;
+    flex: 0 0 47%;
+    scroll-snap-align: start;
+    border-radius: 6px;
+    overflow: hidden;
 }
 .carousel-slide img {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: var(--bg-primary);
+    height: 280px;
+    object-fit: cover;
+    border-radius: 6px;
+    transition: transform 0.3s;
 }
-
-@media (min-width: 769px) {
-    .moments-carousel { max-width: 400px; margin: 0 auto; }
-}
+.carousel-slide img:hover { transform: scale(1.03); }
 .carousel-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     border: none;
     color: #fff;
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
+    font-size: 1.2rem;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -353,27 +358,15 @@ body {
     transition: background 0.2s;
     z-index: 2;
 }
-.carousel-btn:hover { background: rgba(0, 0, 0, 0.75); }
-.carousel-prev { left: 0.8rem; }
-.carousel-next { right: 0.8rem; }
-.carousel-dots {
-    position: absolute;
-    bottom: 0.8rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 0.5rem;
-    z-index: 2;
+.carousel-btn:hover { background: rgba(0, 0, 0, 0.85); }
+.carousel-prev { left: 0.4rem; }
+.carousel-next { right: 0.4rem; }
+.carousel-dots { display: none; }
+
+@media (max-width: 768px) {
+    .carousel-slide { flex: 0 0 85%; }
+    .carousel-slide img { height: 220px; }
 }
-.carousel-dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.carousel-dots span.active { background: var(--accent); }
 
 /* ===== Stats ===== */
 .section-stats { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }

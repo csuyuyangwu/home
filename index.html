@@ -198,22 +198,17 @@
                         <span class="section-line"></span>
                     </div>
                     <div class="moments-carousel" @mouseenter="pauseCarousel" @mouseleave="resumeCarousel">
-                        <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+                        <div class="carousel-track" ref="carouselTrack">
                             <div v-for="(img, i) in momentPhotos" :key="i" class="carousel-slide">
                                 <img :src="img" :alt="'Moment ' + (i + 1)">
                             </div>
                         </div>
-                        <button class="carousel-btn carousel-prev" @click="prevSlide">
+                        <button class="carousel-btn carousel-prev" @click="scrollCarousel(-1)">
                             <i class="ri-arrow-left-s-line"></i>
                         </button>
-                        <button class="carousel-btn carousel-next" @click="nextSlide">
+                        <button class="carousel-btn carousel-next" @click="scrollCarousel(1)">
                             <i class="ri-arrow-right-s-line"></i>
                         </button>
-                        <div class="carousel-dots">
-                            <span v-for="(img, i) in momentPhotos" :key="i"
-                                :class="{ active: currentSlide === i }"
-                                @click="currentSlide = i"></span>
-                        </div>
                     </div>
                 </section>
             </main>
@@ -572,17 +567,25 @@
                     'static/img/moments/2.jpg',
                     'static/img/moments/3.jpg'
                 ]);
-                const currentSlide = ref(0);
+                const carouselTrack = ref(null);
                 let carouselTimer = null;
 
-                function nextSlide() {
-                    currentSlide.value = (currentSlide.value + 1) % momentPhotos.value.length;
+                function scrollCarousel(dir) {
+                    const el = carouselTrack.value;
+                    if (!el) return;
+                    el.scrollBy({ left: el.clientWidth * 0.8 * dir, behavior: 'smooth' });
                 }
-                function prevSlide() {
-                    currentSlide.value = (currentSlide.value - 1 + momentPhotos.value.length) % momentPhotos.value.length;
+                function autoScrollCarousel() {
+                    const el = carouselTrack.value;
+                    if (!el) return;
+                    if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 10) {
+                        el.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        el.scrollBy({ left: el.clientWidth * 0.8, behavior: 'smooth' });
+                    }
                 }
                 function startCarousel() {
-                    carouselTimer = setInterval(nextSlide, 4000);
+                    carouselTimer = setInterval(autoScrollCarousel, 4000);
                 }
                 function pauseCarousel() {
                     if (carouselTimer) clearInterval(carouselTimer);
@@ -788,7 +791,7 @@
                     showEmail, openEmail, closeEmail, isSpecialLink, handleSocialClick,
                     site, navLinks, profile, socialLinks, about, projects,
                     experience, news, stats, resourceLinks, typedText, hitokoto, poetry,
-                    momentPhotos, currentSlide, nextSlide, prevSlide,
+                    momentPhotos, carouselTrack, scrollCarousel,
                     pauseCarousel, resumeCarousel, currentYear, visibleSections
                 };
             }
