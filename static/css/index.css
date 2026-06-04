@@ -372,5 +372,55 @@ html { scrollbar-width: none; -ms-overflow-style: none; }
 /* ===== Selection ===== */
 ::selection { background: var(--accent); color: var(--bg-primary); }
 
+/* ===== WeChat Modal ===== */
+.wechat-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.wechat-modal.active { opacity: 1; pointer-events: auto; }
+.wechat-modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.wechat-modal.active .wechat-modal-content { transform: translateY(0); }
+.wechat-modal-close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.wechat-modal-close:hover { color: var(--text-primary); }
+.wechat-qr {
+    width: 220px;
+    height: 220px;
+    border-radius: 8px;
+    object-fit: contain;
+    margin-bottom: 0.8rem;
+}
+.wechat-modal-content p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
 /* ===== Focus ===== */
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

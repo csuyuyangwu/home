@@ -45,8 +45,11 @@
                     <p class="subtitle">{{ profile.title }}</p>
                     <p class="bio">{{ profile.bio }}</p>
                     <div class="social-links">
-                        <a v-for="social in socialLinks" :key="social.name" :href="social.url" target="_blank"
-                            class="social-link" :title="social.name">
+                        <a v-for="social in socialLinks" :key="social.name"
+                            :href="social.name === 'WeChat' || social.name === '微信' ? undefined : social.url"
+                            :target="social.name === 'WeChat' || social.name === '微信' ? undefined : '_blank'"
+                            class="social-link" :title="social.name"
+                            @click="social.name === 'WeChat' || social.name === '微信' ? openWechat() : null">
                             <i :class="social.icon"></i>
                         </a>
                     </div>
@@ -236,6 +239,17 @@
                 </div>
             </footer>
         </div>
+
+        <!-- WeChat QR Modal -->
+        <div class="wechat-modal" :class="{ active: showWechat }" @click.self="closeWechat">
+            <div class="wechat-modal-content">
+                <button class="wechat-modal-close" @click="closeWechat">
+                    <i class="ri-close-line"></i>
+                </button>
+                <img src="static/img/wechat.jpg" alt="WeChat QR Code" class="wechat-qr">
+                <p>{{ tt('Scan to add WeChat', '扫码添加微信') }}</p>
+            </div>
+        </div>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
@@ -254,6 +268,11 @@
                 function toggleLang() {
                     lang.value = lang.value === 'en' ? 'zh' : 'en';
                 }
+
+                // ===== 微信二维码弹窗 =====
+                const showWechat = ref(false);
+                function openWechat() { showWechat.value = true; }
+                function closeWechat() { showWechat.value = false; }
 
                 // ===== 站点配置 =====
                 const site = reactive({
@@ -800,7 +819,7 @@
                 });
 
                 return {
-                    lang, tt, toggleLang,
+                    lang, tt, toggleLang, showWechat, openWechat, closeWechat,
                     site, navLinks, profile, socialLinks, about, skills, projects,
                     experience, news, stats, resourceLinks, typedText, hitokoto, poetry,
                     currentYear, visibleSections
