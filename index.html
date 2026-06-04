@@ -221,7 +221,10 @@
                     <div class="footer-contact">
                         <h4>{{ tt('Connect', '联系方式') }}</h4>
                         <div class="contact-items">
-                            <a v-for="social in socialLinks" :key="social.name" :href="social.url" target="_blank">
+                            <a v-for="social in socialLinks" :key="social.name"
+                                :href="social.name === 'WeChat' || social.name === '微信' ? undefined : social.url"
+                                :target="social.name === 'WeChat' || social.name === '微信' ? undefined : '_blank'"
+                                @click="social.name === 'WeChat' || social.name === '微信' ? openWechat() : null">
                                 <i :class="social.icon"></i> {{ social.name }}
                             </a>
                         </div>
