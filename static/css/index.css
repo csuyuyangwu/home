@@ -242,6 +242,8 @@ body {
     transition: all 0.2s;
 }
 .author-link:hover { text-decoration: underline; color: var(--accent-secondary); }
+.author-link.author-text { color: var(--text-secondary); cursor: default; }
+.author-link.author-text:hover { text-decoration: none; color: var(--text-secondary); }
 .author-link + .author-link::before { content: '·'; color: var(--text-muted); margin-right: 0.4rem; }
 .project-image { flex: 0 0 320px; }
 .project-image img {
