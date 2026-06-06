@@ -312,7 +312,7 @@ body {
 .timeline-content h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.2rem; }
 .timeline-company { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
 .timeline-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
-.timeline-badge { width: 60px; height: 60px; border-radius: 8px; object-fit: contain; flex-shrink: 0; background: var(--bg-primary); padding: 0.3rem; }
+.timeline-badge { width: 90px; height: 90px; border-radius: 8px; object-fit: contain; flex-shrink: 0; background: var(--bg-primary); padding: 0.3rem; }
 
 /* ===== Moments Carousel ===== */
 .moments-carousel {
