@@ -128,10 +128,15 @@
                         <div v-for="(item, index) in experience" :key="index" class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
-                                <div class="timeline-date">{{ item.date }}</div>
-                                <h3>{{ item.title }}</h3>
-                                <p class="timeline-company">{{ item.company }}</p>
-                                <p class="timeline-desc">{{ item.desc }}</p>
+                                <div class="timeline-body">
+                                    <div class="timeline-text">
+                                        <div class="timeline-date">{{ item.date }}</div>
+                                        <h3>{{ item.title }}</h3>
+                                        <p class="timeline-company">{{ item.company }}</p>
+                                        <p class="timeline-desc">{{ item.desc }}</p>
+                                    </div>
+                                    <img v-if="item.image" :src="item.image" :alt="item.company" class="timeline-badge">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -395,8 +400,8 @@
 
                 // ===== 工作经历 =====
                 const experience = ref([
-                    { date: '2023 - Present', title: 'Undergraduate in Remote Sensing Science and Technology', company: 'Central South University', desc: 'Studying remote sensing expertise, exploring various applications and methods of AI + remote sensing.' },
-                    { date: '2020 - 2023', title: 'High School Studies', company: 'Qimen No.1 Middle School, Huangshan, Anhui', desc: 'Mainly studied mathematics, physics, and English fundamentals.' }
+                    { date: '2023 - Present', title: 'Undergraduate in Remote Sensing Science and Technology', company: 'Central South University', desc: 'Studying remote sensing expertise, exploring various applications and methods of AI + remote sensing.', image: 'static/img/csu-badge.jpg' },
+                    { date: '2020 - 2023', title: 'High School Studies', company: 'Qimen No.1 Middle School, Huangshan, Anhui', desc: 'Mainly studied mathematics, physics, and English fundamentals.', image: 'static/img/qimen-badge.jpg' }
                 ]);
 
                 // ===== 新闻动态 =====
@@ -496,8 +501,8 @@
                         }
                     ],
                     experience: [
-                        { en: { date: '2023 - Present', title: 'Undergraduate in Remote Sensing Science and Technology', company: 'Central South University', desc: 'Studying remote sensing expertise, exploring various applications and methods of AI + remote sensing.' }, zh: { date: '2023 - 至今', title: '遥感科学与技术本科生', company: '中南大学', desc: '学习遥感专业知识，探索AI+遥感的各种应用和方法' } },
-                        { en: { date: '2020 - 2023', title: 'High School Studies', company: 'Qimen No.1 Middle School, Huangshan, Anhui', desc: 'Mainly studied mathematics, physics, and English fundamentals.' }, zh: { date: '2020 - 2023', title: '高中学习', company: '安徽省黄山市祁门县第一中学', desc: '主要学习数理基础以及英语基础' } }
+                        { en: { date: '2023 - Present', title: 'Undergraduate in Remote Sensing Science and Technology', company: 'Central South University', desc: 'Studying remote sensing expertise, exploring various applications and methods of AI + remote sensing.', image: 'static/img/csu-badge.jpg' }, zh: { date: '2023 - 至今', title: '遥感科学与技术本科生', company: '中南大学', desc: '学习遥感专业知识，探索AI+遥感的各种应用和方法', image: 'static/img/csu-badge.jpg' } },
+                        { en: { date: '2020 - 2023', title: 'High School Studies', company: 'Qimen No.1 Middle School, Huangshan, Anhui', desc: 'Mainly studied mathematics, physics, and English fundamentals.', image: 'static/img/qimen-badge.jpg' }, zh: { date: '2020 - 2023', title: '高中学习', company: '安徽省黄山市祁门县第一中学', desc: '主要学习数理基础以及英语基础', image: 'static/img/qimen-badge.jpg' } }
                     ],
                     news: [
                         { en: { title: 'Grand Prize in UAV Low-Altitude Data Processing, 18th CSU Surveying Innovation Competition — Heading to Lanzhou Nationals!', venue: 'China Association of Remote Sensing Application, China Society of Surveying and Mapping', desc: 'Awarded the Grand Prize for outstanding performance in low-altitude UAV data processing, and will represent the university at the national competition in Lanzhou.', tags: ['Award', 'Remote Sensing', 'Data Processing'] }, zh: { title: '中南大学第十八届大学生测绘学科创新创业智能大赛低空无人机数据处理赛项特等奖,国赛兰州见！', venue: '中国遥感应用协会，中国测绘协会', desc: '凭借在低空无人机数据处理方面的出色表现和精彩发挥，荣获特等奖，并将代表学校参加国赛兰州站的角逐。', tags: ['奖状', '遥感', '数据处理'] } },
@@ -562,6 +567,7 @@
                         exp.title = d.title;
                         exp.company = d.company;
                         exp.desc = d.desc;
+                        exp.image = d.image;
                     });
 
                     // news
