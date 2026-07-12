@@ -258,7 +258,7 @@ body {
 .metric-label { font-size: 0.68rem; color: var(--text-muted); }
 
 /* ===== News ===== */
-.news-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.news-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 .news-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
