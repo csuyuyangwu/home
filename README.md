@@ -21,7 +21,15 @@
 - Canvas 粒子动画
 - Remix Icon 图标库
 
-## 快速开始
+## 点赞与留言审核
+
+主页底部已加入点赞和留言区。跨访客共享数据、QQ 邮箱审核及通过后发布，由独立 Cloudflare Worker + D1 后端处理。完整配置、测试和审核方式见 [backend/README.md](backend/README.md)。
+
+```bash
+npm run test:community
+```
+
+## 本地预览
 
 ```bash
 # 本地预览

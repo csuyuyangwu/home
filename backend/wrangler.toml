@@ -1,0 +1,20 @@
+name = "yuyang-home-community"
+main = "worker.mjs"
+compatibility_date = "2026-10-15"
+workers_dev = true
+preview_urls = false
+
+[vars]
+SITE_ORIGIN = "https://csuyuyangwu.github.io"
+SITE_URL = "https://csuyuyangwu.github.io/home/"
+MODERATOR_EMAIL = "2995824036@qq.com"
+PUBLIC_API_URL = "https://yuyang-home-community.csuyuyangwu-home.workers.dev"
+MAIL_FROM = "Personal Homepage <onboarding@resend.dev>"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "yuyang-home-community"
+database_id = "f385bd80-c762-4e37-8c2e-531a7f5bbbda"
+
+[triggers]
+crons = ["*/5 * * * *"]

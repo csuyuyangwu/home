@@ -227,6 +227,57 @@
                 </section>
             </main>
 
+            <section id="community" class="community-section" aria-labelledby="community-title">
+                <div class="section-header">
+                    <i class="ri-chat-heart-line" aria-hidden="true"></i>
+                    <h2 id="community-title">{{ tt('Leave a little warmth', '留下你的足迹') }}</h2>
+                    <span class="section-line"></span>
+                </div>
+                <div class="community-like-panel">
+                    <div>
+                        <h3>{{ tt('Enjoyed your visit?', '喜欢这个主页吗？') }}</h3>
+                        <p>{{ tt('A little encouragement goes a long way.', '点个赞，给我一点继续探索的动力。') }}</p>
+                    </div>
+                    <button class="community-like-button" type="button" @click="addLike"
+                        :disabled="!communityConfigured || liking || hasLiked || communityLoading"
+                        :aria-pressed="hasLiked" :class="{ liked: hasLiked }">
+                        <i :class="hasLiked ? 'ri-heart-fill' : 'ri-heart-line'" aria-hidden="true"></i>
+                        <span>{{ liking ? tt('Liking…', '点赞中…') : hasLiked ? tt('Liked', '已点赞') : tt('Like', '点赞') }}</span>
+                        <span class="community-like-count" aria-live="polite">{{ likeCount === null ? '—' : likeCount.toLocaleString() }}</span>
+                    </button>
+                </div>
+                <p v-if="!communityConfigured" class="community-hint" role="status">{{ tt('Likes and messages will open soon.', '点赞和留言功能筹备中，敬请期待。') }}</p>
+                <p v-if="likeError" class="community-error" role="status">{{ tt('Could not load likes. Please try again.', '点赞服务暂不可用，请重试。') }} <button class="community-text-button" type="button" @click="loadLikes">{{ tt('Retry', '重试') }}</button></p>
+                <div class="community-guestbook">
+                    <h3>{{ tt('Guestbook', '留言区') }}</h3>
+                    <p class="community-hint">{{ tt('Everyone is welcome to leave a message. Your name and message become public only after my approval.', '欢迎所有访客留言。昵称和留言仅在我审核通过后公开展示。') }}</p>
+                    <form class="community-form" @submit.prevent="submitComment">
+                        <label for="guest-name">{{ tt('Name', '昵称') }}</label>
+                        <input id="guest-name" v-model="commentForm.name" maxlength="40" required autocomplete="nickname" :disabled="!communityConfigured || submittingComment">
+                        <label for="guest-message">{{ tt('Message', '留言内容') }}</label>
+                        <textarea id="guest-message" v-model="commentForm.message" maxlength="1000" rows="4" required :disabled="!communityConfigured || submittingComment"></textarea>
+                        <div class="community-trap" aria-hidden="true">
+                            <label for="guest-website">Website</label><input id="guest-website" v-model="commentForm.website" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="community-form-actions">
+                            <span class="community-hint">{{ commentForm.message.length }} / 1000</span>
+                            <button class="community-submit-button" type="submit" :disabled="!communityConfigured || submittingComment">{{ submittingComment ? tt('Submitting…', '提交中…') : tt('Submit for approval', '提交审核') }}</button>
+                        </div>
+                        <p v-if="communityMessage" :class="communityNotice === 'submitted' ? 'community-success' : 'community-error'" role="status">{{ communityMessage }}</p>
+                    </form>
+                    <div class="community-comments" aria-live="polite" :aria-busy="commentsLoading">
+                        <p v-if="commentsError" class="community-error">{{ tt('Could not load messages.', '留言加载失败。') }} <button class="community-text-button" type="button" @click="loadComments(false)">{{ tt('Retry', '重试') }}</button></p>
+                        <p v-else-if="commentsLoading && !publicComments.length" class="community-hint">{{ tt('Loading messages…', '正在加载留言…') }}</p>
+                        <p v-else-if="communityConfigured && !publicComments.length" class="community-hint">{{ tt('No approved messages yet. Be the first to say hello!', '还没有公开留言，来打个招呼吧！') }}</p>
+                        <article v-for="comment in publicComments" :key="comment.id" class="community-comment">
+                            <div class="community-comment-header"><strong>{{ comment.name }}</strong><time :datetime="comment.createdAt">{{ formatCommentDate(comment.createdAt) }}</time></div>
+                            <p>{{ comment.message }}</p>
+                        </article>
+                        <button v-if="commentsCursor" class="community-text-button" type="button" :disabled="commentsLoading" @click="loadComments(true)">{{ commentsLoading ? tt('Loading…', '加载中…') : tt('Load more', '加载更多') }}</button>
+                    </div>
+                </div>
+            </section>
+
             <!-- Footer -->
             <footer id="contact" class="footer">
                 <div class="footer-content">
@@ -293,6 +344,8 @@
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="static/js/community-config.js"></script>
+    <script src="static/js/community.js"></script>
     <script>
         const { createApp, ref, reactive, onMounted, computed, watch } = Vue;
 
@@ -300,6 +353,7 @@
             setup() {
                 // ===== 语言切换 =====
                 const lang = ref('en');
+                const community = window.useCommunity(Vue, lang);
 
                 function tt(en, zh) {
                     return lang.value === 'en' ? en : zh;
@@ -861,6 +915,7 @@
                 });
 
                 return {
+                    ...community,
                     lang, tt, toggleLang, showWechat, openWechat, closeWechat,
                     showEmail, openEmail, closeEmail, isSpecialLink, handleSocialClick,
                     site, navLinks, profile, socialLinks, about, projects,

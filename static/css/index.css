@@ -420,6 +420,42 @@ body {
 .link-card span { font-size: 0.88rem; color: var(--text-primary); font-weight: 500; }
 .link-card p { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.15rem; }
 
+/* ===== Community ===== */
+.community-section { position: relative; z-index: 1; max-width: 960px; margin: 0 auto 3rem; padding: 0 1.5rem; }
+.community-like-panel { display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: linear-gradient(120deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08)); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; }
+.community-like-panel h3, .community-guestbook h3 { font-size: 1rem; margin-bottom: 0.35rem; }
+.community-like-panel p, .community-hint { font-size: 0.82rem; color: var(--text-muted); }
+.community-hint { margin: 0.65rem 0; }
+.community-like-button, .community-submit-button { display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem; padding: 0.65rem 1rem; border: 1px solid var(--border-accent); border-radius: var(--radius); background: rgba(88,166,255,0.12); color: var(--accent); font: inherit; cursor: pointer; }
+.community-like-button { flex-shrink: 0; }
+.community-like-button i { font-size: 1.4rem; }
+.community-like-button.liked { color: #f778ba; border-color: #f778ba; background: rgba(247,120,186,0.08); }
+.community-like-count { padding-left: 0.6rem; border-left: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+.community-section button:disabled { opacity: 0.55; cursor: default; }
+.community-section :is(button, input, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.community-guestbook { margin-top: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; background: var(--bg-card); }
+.community-form { display: flex; flex-direction: column; gap: 0.45rem; margin-top: 1rem; }
+.community-form label { color: var(--text-secondary); font-size: 0.85rem; }
+.community-form input, .community-form textarea { width: 100%; padding: 0.7rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-primary); color: var(--text-primary); font: inherit; font-size: 0.9rem; }
+.community-form input { max-width: 320px; margin-bottom: 0.4rem; }
+.community-form textarea { resize: vertical; min-height: 120px; }
+.community-form-actions { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.community-trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.community-error { color: #ff938a; font-size: 0.82rem; margin-top: 0.6rem; }
+.community-success { color: var(--accent-green); font-size: 0.82rem; }
+.community-text-button { background: transparent; border: 0; color: var(--accent); font: inherit; cursor: pointer; text-decoration: underline; padding: 0.3rem; }
+.community-comments { margin-top: 1.25rem; }
+.community-comment { padding: 1rem 0; border-top: 1px solid var(--border); }
+.community-comment-header { display: flex; justify-content: space-between; gap: 0.75rem; font-size: 0.82rem; }
+.community-comment-header time { color: var(--text-muted); flex-shrink: 0; }
+.community-comment p { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.4rem; }
+.community-comment-header strong { overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+    .community-section { padding: 0 1.2rem; }
+    .community-like-panel { flex-direction: column; align-items: flex-start; }
+    .community-like-panel, .community-guestbook { padding: 1rem; }
+}
+
 /* ===== Footer ===== */
 .footer { border-top: 1px solid var(--border); margin-top: 2.5rem; padding: 2rem 1.5rem 1.5rem; }
 .footer-content { display: flex; justify-content: space-between; max-width: 960px; margin: 0 auto 1.5rem; }
