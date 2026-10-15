@@ -273,6 +273,8 @@ body {
 .news-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
 .news-venue { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.45rem; font-style: italic; }
 .news-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.7rem; line-height: 1.65; }
+.news-image-link { display: block; max-width: 620px; margin-bottom: 0.9rem; border-radius: var(--radius); overflow: hidden; }
+.news-image { display: block; width: 100%; height: auto; }
 .news-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 .news-tags span {
     font-size: 0.7rem;
