@@ -128,9 +128,9 @@
                         <div v-for="(item, index) in experience" :key="index" class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
+                                <div class="timeline-date">{{ item.date }}</div>
                                 <div class="timeline-body">
                                     <div class="timeline-text">
-                                        <div class="timeline-date">{{ item.date }}</div>
                                         <h3>{{ item.title }}</h3>
                                         <p class="timeline-company">{{ item.company }}</p>
                                         <p v-if="item.desc" class="timeline-desc">{{ item.desc }}</p>
