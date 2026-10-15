@@ -21,3 +21,8 @@ CREATE TABLE IF NOT EXISTS rate_limits (
     count INTEGER NOT NULL DEFAULT 1,
     expires_at INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS owner_tokens (
+    token_hash TEXT PRIMARY KEY,
+    kind TEXT NOT NULL CHECK(kind IN ('login', 'session')),
+    expires_at INTEGER NOT NULL
+);

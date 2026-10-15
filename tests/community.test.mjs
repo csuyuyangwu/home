@@ -54,6 +54,28 @@ function captureMail(t, status = 200) {
     return emails;
 }
 const linkFrom = mail => mail.body.text.match(/https:\/\/community\.example\.test\/moderate\?[^\s]+/)[0];
+function adminRequest(env, path, fields, cookie, origin = 'https://community.example.test') {
+    return worker.fetch(new Request('https://community.example.test' + path, {
+        method: fields ? 'POST' : 'GET',
+        headers: { Origin: origin, ...(cookie ? { Cookie: cookie } : {}), ...(fields ? { 'Content-Type': 'application/x-www-form-urlencoded' } : {}), 'CF-Connecting-IP': '192.0.2.2' },
+        ...(fields ? { body: new URLSearchParams(fields) } : {})
+    }), env);
+}
+async function loginOwner(env, emails) {
+    assert.equal((await adminRequest(env, '/admin/login', {})).status, 200);
+    const email = emails.at(-1).body;
+    assert.deepEqual(email.to, ['2995824036@qq.com']);
+    const link = new URL(email.text.match(/https:\/\/community\.example\.test\/admin\/confirm\?[^\s]+/)[0]);
+    const token = link.searchParams.get('token');
+    assert.equal((await adminRequest(env, link.pathname + link.search)).status, 200);
+    // Link previews do not consume the one-time token.
+    assert.equal((await adminRequest(env, link.pathname + link.search)).status, 200);
+    const response = await adminRequest(env, '/admin/confirm', { token });
+    assert.equal(response.status, 303);
+    const setCookie = response.headers.get('Set-Cookie');
+    assert(setCookie.includes('HttpOnly')); assert(setCookie.includes('Secure')); assert(setCookie.includes('SameSite=Strict'));
+    return { cookie: setCookie.split(';')[0], token };
+}
 
 test('shared like count is persistent and repeated visitor IDs are idempotent', async () => {
     const { request } = fixture();
@@ -166,4 +188,57 @@ test('public pagination only returns approved messages and excludes private fiel
     assert.equal(response.headers.get('Cache-Control'), 'no-store');
     assert.equal(response.headers.get('Access-Control-Allow-Origin'), env.SITE_ORIGIN);
     assert.equal((await request('/api/comments?before=oops')).status, 400);
+});
+
+test('only emailed owner login can delete; previews and foreign requests cannot delete', async t => {
+    const { env, request } = fixture();
+    const emails = captureMail(t);
+    await request('/api/comments', 'POST', { name: 'Guest', message: '<script>Do not execute</script>' });
+    const reviewLink = linkFrom(emails[0]);
+    await worker.fetch(reviewRequest(reviewLink, 'approve'), env);
+    const id = (await (await request('/api/comments')).json()).items[0].id;
+    assert.equal((await adminRequest(env, '/admin/delete', { id, confirm: 'delete' })).status, 403);
+    assert.equal((await request('/api/comments/' + id, 'DELETE')).status, 404);
+    assert.equal((await adminRequest(env, '/admin/delete?id=' + id)).status, 403);
+    const { cookie, token } = await loginOwner(env, emails);
+    const replay = await adminRequest(env, '/admin/confirm', { token });
+    assert.equal(replay.status, 403);
+    const publicBody = await (await request('/api/comments')).text();
+    assert(!publicBody.includes(token)); assert(!publicBody.includes('token_hash'));
+    const adminPage = await adminRequest(env, '/admin', undefined, cookie);
+    const adminHtml = await adminPage.text();
+    assert(adminHtml.includes('&lt;script&gt;')); assert(!adminHtml.includes('<script>'));
+    const preview = await adminRequest(env, '/admin/delete?id=' + id, undefined, cookie);
+    assert.equal(preview.status, 200);
+    assert((await preview.text()).includes('确认删除'));
+    assert.equal((await (await request('/api/comments')).json()).items.length, 1);
+    assert.equal((await adminRequest(env, '/admin/delete', { id, confirm: 'delete' }, cookie, 'https://attacker.test')).status, 403);
+    assert.equal((await adminRequest(env, '/admin/delete', { id }, cookie)).status, 400);
+    assert.equal((await adminRequest(env, '/admin/delete', { id, confirm: 'delete' }, cookie)).status, 303);
+    assert.equal((await (await request('/api/comments')).json()).items.length, 0);
+    assert.equal(await env.DB.prepare('SELECT id FROM comments WHERE id = ?').bind(id).first(), null);
+    // An old review email cannot recreate a deleted comment.
+    assert.equal((await worker.fetch(reviewRequest(reviewLink, 'approve'), env)).status, 403);
+    assert.equal((await adminRequest(env, '/admin/logout', {}, cookie)).status, 303);
+    assert.equal((await adminRequest(env, '/admin/delete', { id, confirm: 'delete' }, cookie)).status, 403);
+});
+
+test('owner sessions can delete old comments; expired sessions and login tokens are rejected', async t => {
+    const { env } = fixture();
+    const emails = captureMail(t);
+    await env.DB.prepare("INSERT INTO comments (reference, name, message, created_at, status) VALUES (?, 'Old guest', 'Old comment', '2020-01-01T00:00:00Z', 'approved')")
+        .bind(crypto.randomUUID()).run();
+    const { cookie } = await loginOwner(env, emails);
+    assert.equal((await adminRequest(env, '/admin/delete', { id: '1', confirm: 'delete' }, cookie)).status, 303);
+    const now = Date.now;
+    t.mock.method(Date, 'now', () => now() + 8 * 24 * 3600000);
+    assert.equal((await adminRequest(env, '/admin/delete', { id: '1', confirm: 'delete' }, cookie)).status, 403);
+    t.mock.restoreAll();
+    const freshEmails = captureMail(t);
+    await adminRequest(env, '/admin/login', {});
+    const entry = await env.DB.prepare("SELECT token_hash FROM owner_tokens WHERE kind = 'login'").first();
+    await env.DB.prepare("UPDATE owner_tokens SET expires_at = 0 WHERE token_hash = ?").bind(entry.token_hash).run();
+    const lastMail = freshEmails.at(-1);
+    const oldLink = new URL(lastMail.body.text.match(/https:\/\/community\.example\.test\/admin\/confirm\?[^\s]+/)[0]);
+    assert.equal((await adminRequest(env, oldLink.pathname + oldLink.search)).status, 403);
 });

@@ -450,6 +450,7 @@ body {
 .community-comment-header time { color: var(--text-muted); flex-shrink: 0; }
 .community-comment p { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.4rem; }
 .community-comment-header strong { overflow-wrap: anywhere; }
+.community-owner-link { display: block; width: fit-content; margin-top: 1rem; font-size: 0.78rem; }
 @media (max-width: 480px) {
     .community-section { padding: 0 1.2rem; }
     .community-like-panel { flex-direction: column; align-items: flex-start; }

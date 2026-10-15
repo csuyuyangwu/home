@@ -275,6 +275,7 @@
                         </article>
                         <button v-if="commentsCursor" class="community-text-button" type="button" :disabled="commentsLoading" @click="loadComments(true)">{{ commentsLoading ? tt('Loading…', '加载中…') : tt('Load more', '加载更多') }}</button>
                     </div>
+                    <a v-if="communityAdminUrl" :href="communityAdminUrl" class="community-text-button community-owner-link" target="_blank" rel="noopener noreferrer">{{ tt('Owner management', '站主管理') }}</a>
                 </div>
             </section>
 

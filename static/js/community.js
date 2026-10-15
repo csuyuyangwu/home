@@ -1,6 +1,7 @@
 window.useCommunity = function ({ ref, reactive, computed, onMounted }, lang) {
     const api = (window.COMMUNITY_API_URL || '').replace(/\/$/, '');
     const communityConfigured = Boolean(api);
+    const communityAdminUrl = api ? api + '/admin' : '';
     const likeCount = ref(null);
     const hasLiked = ref(false);
     const liking = ref(false);
@@ -100,7 +101,7 @@ window.useCommunity = function ({ ref, reactive, computed, onMounted }, lang) {
         if (communityConfigured) { loadLikes(); loadComments(); }
     });
     return {
-        communityConfigured, likeCount, hasLiked, liking, communityLoading, commentsLoading,
+        communityConfigured, communityAdminUrl, likeCount, hasLiked, liking, communityLoading, commentsLoading,
         submittingComment, publicComments, commentsCursor, communityNotice, communityMessage,
         likeError, commentsError, commentForm, loadLikes, loadComments, addLike, submitComment, formatCommentDate
     };
