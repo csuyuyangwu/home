@@ -128,7 +128,10 @@
                         <div v-for="(item, index) in experience" :key="index" class="timeline-item">
                             <div class="timeline-dot"></div>
                             <div class="timeline-content">
-                                <div class="timeline-date">{{ item.date }}</div>
+                                <div class="timeline-date">
+                                    <span>{{ item.date.split(' - ')[0] }} –</span>
+                                    <span>{{ item.date.split(' - ')[1] }}</span>
+                                </div>
                                 <div class="timeline-body">
                                     <div class="timeline-text">
                                         <h3>{{ item.title }}</h3>
