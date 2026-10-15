@@ -164,6 +164,7 @@ body {
     padding: 1rem;
     transition: all 0.25s;
 }
+.about-card:only-child { grid-column: 1 / -1; }
 .about-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
 .about-icon { color: var(--accent); font-size: 1.35rem; margin-bottom: 0.5rem; }
 .about-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem; }
