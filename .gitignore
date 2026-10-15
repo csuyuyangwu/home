@@ -1,6 +1,6 @@
 node_modules/
 .pages-dist/
-backend/.wrangler/
+.wrangler/
 backend/.dev.vars
 backend/.env*
 
