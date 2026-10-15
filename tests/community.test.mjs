@@ -67,7 +67,9 @@ async function loginOwner(env, emails) {
     assert.deepEqual(email.to, ['2995824036@qq.com']);
     const link = new URL(email.text.match(/https:\/\/community\.example\.test\/admin\/confirm\?[^\s]+/)[0]);
     const token = link.searchParams.get('token');
-    assert.equal((await adminRequest(env, link.pathname + link.search)).status, 200);
+    const loginPreview = await adminRequest(env, link.pathname + link.search);
+    assert.equal(loginPreview.status, 200);
+    assert.equal(loginPreview.headers.get('Referrer-Policy'), 'strict-origin');
     // Link previews do not consume the one-time token.
     assert.equal((await adminRequest(env, link.pathname + link.search)).status, 200);
     const response = await adminRequest(env, '/admin/confirm', { token });
@@ -101,6 +103,7 @@ test('pending comments stay private; email preview cannot approve; signed POST c
     const link = linkFrom(emails[0]);
     const preview = await worker.fetch(reviewRequest(link), env);
     assert.equal(preview.status, 200);
+    assert.equal(preview.headers.get('Referrer-Policy'), 'strict-origin');
     assert((await preview.text()).includes('&lt;script&gt;'));
     assert.equal((await (await request('/api/comments')).json()).items.length, 0);
     assert.equal((await worker.fetch(reviewRequest(link, 'approve'), env)).status, 303);

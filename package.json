@@ -4,6 +4,7 @@
   "description": "未寻 - 个人主页",
   "scripts": {
     "test:community": "node --test tests/community.test.mjs tests/community-client.test.mjs",
+    "test:community:browser": "node tests/community-browser.mjs",
     "build:pages": "node scripts/prepare-pages.mjs",
     "serve": "npx serve . -p 3000",
     "deploy:gh": "gh-pages -d . -b gh-pages"

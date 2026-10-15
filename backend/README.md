@@ -76,6 +76,8 @@ https://yuyang-home-community.csuyuyangwu-home.workers.dev/admin
 
 在仓库根目录运行 `npm run test:community`。测试使用真实内存 SQLite 模拟 D1，邮件请求在测试内拦截，不会发送真实邮件。
 
+审核、登录、删除和退出还可用真实浏览器回归：安装 `playwright-core`，将 `COMMUNITY_TEST_BROWSER` 设置为本机 Chromium/Edge/Chrome 的可执行文件路径，运行 `npm run test:community:browser`。默认使用 Windows Edge。若 Playwright 在其他目录，可通过 `PLAYWRIGHT_MODULE` 指定其 `index.mjs` 的 `file:///` URL。此检查同样只使用内存数据库和模拟邮件，不修改生产留言。页面使用 `strict-origin` 策略，只发送站点来源，不发送含私密 token 的完整 URL，同时确保表单的 `Origin` 不会被浏览器置为 `null`。
+
 完整本地联调：复制 `.dev.vars.example` 为 `.dev.vars`，设置值；在 `wrangler.toml` 暂时将 `SITE_ORIGIN` 设为本地前端 origin、`PUBLIC_API_URL` 设为实际 HTTPS 测试地址，然后使用 `npx wrangler d1 execute yuyang-home-community --local --file=schema.sql` 和 `npx wrangler dev`。不要将开发配置推送到线上。
 
 ## 维护

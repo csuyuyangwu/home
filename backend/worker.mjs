@@ -120,7 +120,10 @@ function reviewPage(title, content, status = 200) {
         headers: {
             'Content-Type': 'text/html; charset=utf-8',
             'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
-            'Referrer-Policy': 'no-referrer',
+            // Send only the origin, never the URL containing a private token.
+            // no-referrer makes browser form POSTs send Origin: null, which
+            // conflicts with the same-origin validation on review/admin forms.
+            'Referrer-Policy': 'strict-origin',
             'X-Robots-Tag': 'noindex, nofollow'
         }
     });
@@ -159,14 +162,14 @@ async function ownerTokenHash(env, token) {
     return sign(env.MODERATION_SECRET, 'owner:' + token);
 }
 function ownerLoginPage(sent = false) {
-    return reviewPage('站主登录', `<p>只有站主邮箱可以收到登录链接。登录后可查看和删除留言。</p>${sent ? '<p>登录邮件已发送，请检查站主邮箱。链接 15 分钟有效，只能使用一次。</p>' : '<form method="post" action="/admin/login"><button>发送登录链接到站主邮箱</button></form>'}`);
+    return reviewPage('站主登录', `<p>只有站主邮箱可以收到登录链接。登录后可查看和删除留言。</p>${sent ? '<p>登录邮件已发送，请检查站主邮箱。链接 15 分钟有效，只能使用一次。</p>' : '<form method="post" action="/admin/login"><button name="action" value="login">发送登录链接到站主邮箱</button></form>'}`);
 }
 async function admin(request, env, url) {
     let form;
     if (request.method === 'POST') {
         if (request.headers.get('Origin') !== url.origin) throw new HttpError(403, 'Invalid origin');
         if (!request.headers.get('Content-Type')?.startsWith('application/x-www-form-urlencoded')) throw new HttpError(415, 'Form required');
-        form = new URLSearchParams(await readBody(request));
+        form = new URLSearchParams(request.body ? await readBody(request) : '');
     }
     if (url.pathname === '/admin/login' && request.method === 'POST') {
         mailConfigured(env);
@@ -242,7 +245,7 @@ async function admin(request, env, url) {
         const statuses = { pending: '待审核', approved: '已公开', rejected: '已拒绝' };
         const entries = results.slice(0, 20).map(comment => `<article><hr><p><strong>${escapeHtml(comment.name)}</strong> · ${statuses[comment.status]} · ${escapeHtml(comment.created_at)}</p><pre>${escapeHtml(comment.message)}</pre><a href="/admin/delete?id=${comment.id}">删除这条留言</a></article>`).join('');
         const more = results.length > 20 ? `<p><a href="/admin?before=${results[19].id}">更早的留言</a></p>` : '';
-        return reviewPage('留言管理', `<p>站主已登录。删除后，主页刷新即可看到变化。</p><form method="post" action="/admin/logout"><button>退出登录</button></form>${url.searchParams.get('deleted') === '1' ? '<p>留言已删除。</p>' : ''}${entries || '<p>暂无留言。</p>'}${more}`);
+        return reviewPage('留言管理', `<p>站主已登录。删除后，主页刷新即可看到变化。</p><form method="post" action="/admin/logout"><button name="action" value="logout">退出登录</button></form>${url.searchParams.get('deleted') === '1' ? '<p>留言已删除。</p>' : ''}${entries || '<p>暂无留言。</p>'}${more}`);
     }
     throw new HttpError(404, 'Not found');
 }
