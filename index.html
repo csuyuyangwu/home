@@ -150,20 +150,22 @@
                         <span class="section-line"></span>
                     </div>
                     <div class="news-grid">
-                        <div v-for="item in news" :key="item.title" class="news-card">
-                            <div class="news-date">
-                                <i :class="item.icon"></i>
-                                {{ item.date }}
+                        <div v-for="item in news" :key="item.title" class="news-card" :class="{ 'news-card-with-image': item.image }">
+                            <div class="news-content">
+                                <div class="news-date">
+                                    <i :class="item.icon"></i>
+                                    {{ item.date }}
+                                </div>
+                                <h3>{{ item.title }}</h3>
+                                <p class="news-venue">{{ item.venue }}</p>
+                                <p class="news-desc">{{ item.desc }}</p>
+                                <div class="news-tags">
+                                    <span v-for="tag in item.tags" :key="tag">{{ tag }}</span>
+                                </div>
                             </div>
-                            <h3>{{ item.title }}</h3>
-                            <p class="news-venue">{{ item.venue }}</p>
-                            <p class="news-desc">{{ item.desc }}</p>
                             <a v-if="item.image" :href="item.image" target="_blank" rel="noopener noreferrer" class="news-image-link">
                                 <img :src="item.image" :alt="item.title" class="news-image" loading="lazy">
                             </a>
-                            <div class="news-tags">
-                                <span v-for="tag in item.tags" :key="tag">{{ tag }}</span>
-                            </div>
                         </div>
                     </div>
                 </section>
