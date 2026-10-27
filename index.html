@@ -11,6 +11,7 @@
     <link rel="icon" type="image/svg+xml" href="static/img/avatar.svg">
     <link rel="alternate icon" href="favicon.ico">
     <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/resume-layout.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
 </head>
 
@@ -32,16 +33,17 @@
                 </div>
             </nav>
 
+            <div class="resume-sheet">
             <!-- Hero -->
             <header class="hero">
                 <div class="hero-content">
                     <div class="avatar-container">
                         <img :src="profile.avatar" :alt="profile.name" class="avatar">
                     </div>
-                    <p class="avatar-name">{{ profile.name }}</p>
-                    <h1 class="title">
+                    <h1 class="avatar-name">{{ profile.name }}</h1>
+                    <p class="title">
                         <span>{{ typedText }}</span><span class="cursor">|</span>
-                    </h1>
+                    </p>
                     <p class="subtitle">{{ profile.title }}</p>
                     <p class="bio">{{ profile.bio }}</p>
                     <div class="social-links">
@@ -312,6 +314,7 @@
                     </p>
                 </div>
             </footer>
+            </div>
         </div>
 
         <!-- WeChat QR Modal -->
