@@ -163,10 +163,6 @@
                             <div class="news-content">
                                 <h3>{{ item.title }}</h3>
                                 <p class="news-venue">{{ item.venue }}</p>
-                                <p class="news-desc">{{ item.desc }}</p>
-                                <div class="news-tags">
-                                    <span v-for="tag in item.tags" :key="tag">{{ tag }}</span>
-                                </div>
                             </div>
                             <a v-if="item.image" :href="item.image" target="_blank" rel="noopener noreferrer" class="news-image-link">
                                 <img :src="item.image" :alt="item.title" class="news-image" loading="lazy">
