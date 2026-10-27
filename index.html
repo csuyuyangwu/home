@@ -7,7 +7,7 @@
     <title>吴雨阳 | Senior Backend Engineer</title>
     <meta name="description" content="我来自中国黄山，目前就读于中南大学遥感科学与技术专业。我的研究兴趣包括视觉-语言模型、计算机视觉、摄影测量与遥感以及模式识别">
     <meta name="keywords" content="Java,Go,Python,微服务,分布式,架构师">
-    <meta name="theme-color" content="#0d1117">
+    <meta name="theme-color" content="#f8f9fa">
     <link rel="icon" type="image/svg+xml" href="static/img/avatar.svg">
     <link rel="alternate icon" href="favicon.ico">
     <link rel="stylesheet" href="static/css/index.css">
@@ -799,7 +799,7 @@
                 // ===== 粒子背景 =====
                 const initParticles = () => {
                     const canvas = document.getElementById('particles');
-                    if (!canvas) return;
+                    if (!canvas || getComputedStyle(canvas).display === 'none') return;
                     const ctx = canvas.getContext('2d');
                     let particles = [];
                     let mouse = { x: null, y: null };
