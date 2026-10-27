@@ -52,6 +52,8 @@ body { font-family: Arial, 'Helvetica Neue', 'Microsoft YaHei', 'PingFang SC', s
 .resume-sheet .contact-items { flex-wrap: wrap; }
 
 @media (max-width: 900px) {
+    .navbar { padding: 0.8rem 1.5rem; }
+    .nav-links { gap: 0.65rem; align-items: center; }
     .resume-sheet { width: calc(100% - 32px); padding: 30px 28px 22px; }
     .resume-sheet .hero-content { column-gap: 24px; }
 }

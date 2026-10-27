@@ -148,11 +148,35 @@
                 <section id="news" class="section" :class="{ visible: visibleSections.news }">
                     <div class="section-header">
                         <i class="ri-newspaper-line"></i>
-                        <h2>{{ tt('News & Achievements', '动态与成果') }}</h2>
+                        <h2>{{ tt('News', '动态') }}</h2>
                         <span class="section-line"></span>
                     </div>
                     <div class="news-grid">
-                        <div v-for="item in news" :key="item.title" class="news-card" :class="{ 'news-card-with-image': item.image }">
+                        <div v-for="item in newsItems" :key="item.title" class="news-card" :class="{ 'news-card-with-image': item.image }">
+                            <div class="news-date">
+                                <i :class="item.icon" aria-hidden="true"></i>
+                                <time :datetime="item.date.replace('.', '-')">{{ item.date }}</time>
+                            </div>
+                            <div class="news-content">
+                                <h3>{{ item.title }}</h3>
+                                <p class="news-venue">{{ item.venue }}</p>
+                            </div>
+                            <a v-if="item.image" :href="item.image" target="_blank" rel="noopener noreferrer" class="news-image-link">
+                                <img :src="item.image" :alt="item.title" class="news-image" loading="lazy">
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Competition achievements -->
+                <section id="achievements" class="section" :class="{ visible: visibleSections.achievements }">
+                    <div class="section-header">
+                        <i class="ri-trophy-line"></i>
+                        <h2>{{ tt('Achievements', '竞赛成果') }}</h2>
+                        <span class="section-line"></span>
+                    </div>
+                    <div class="news-grid">
+                        <div v-for="item in achievements" :key="item.title" class="news-card" :class="{ 'news-card-with-image': item.image }">
                             <div class="news-date">
                                 <i :class="item.icon" aria-hidden="true"></i>
                                 <time :datetime="item.date.replace('.', '-')">{{ item.date }}</time>
@@ -394,6 +418,7 @@
                     { id: 'projects', title: 'Projects' },
                     { id: 'experience', title: 'Experience' },
                     { id: 'news', title: 'News' },
+                    { id: 'achievements', title: 'Achievements' },
                     { id: 'moments', title: 'Moments' },
                     { id: 'contact', title: 'Contact' }
                 ]);
@@ -481,6 +506,7 @@
                         icon: 'ri-trophy-line',
                         date: '2026.08',
                         title: 'First Prize in the Development and Design Competition (Innovative Development), 2026 National College Student Surveying and Mapping Innovation, Entrepreneurship and Intelligence Competition',
+                        category: 'competition',
                         venue: 'Chinese Society for Geodesy, Photogrammetry and Cartography',
                         desc: 'Awarded First Prize in the Development and Design Competition (Innovative Development) as a member of the Central South University team in August 2026.',
                         image: 'static/img/surveying-innovation-2026-first-prize.jpg',
@@ -490,6 +516,7 @@
                         icon: 'ri-trophy-line',
                         date: '2026.08',
                         title: 'First Prize in the 7th “Dabei Cup” National College Student UAV Surveying and Mapping Skills Competition',
+                        category: 'competition',
                         venue: 'Central South University',
                         desc: 'Awarded First Prize as a member of the Central South University team in the 7th “Dabei Cup” National College Student UAV Surveying and Mapping Skills Competition in August 2026.',
                         image: 'static/img/dabei-cup-2026-first-prize.jpg',
@@ -499,6 +526,7 @@
                        icon: 'ri-trophy-line',
                        date: '2026.07',
                        title: 'Third Prize in the 21st CSU Mathematical Modeling Competition (University Selection for the National Contest)',
+                       category: 'competition',
                        venue: 'Central South University',
                        desc: 'Received the Third Prize in the 21st CSU Mathematical Modeling Competition, the university-level selection for the National Mathematical Contest in Modeling. Team members: Tao Haipeng and Zhang Zhiming.',
                        image: 'static/img/mathematical-modeling-third-prize.jpg',
@@ -508,6 +536,7 @@
                         icon: 'ri-trophy-line',
                         date: '2026.06',
                         title: 'Grand Prize in UAV Low-Altitude Data Processing, 18th CSU Surveying Innovation Competition — Heading to Lanzhou Nationals!',
+                        category: 'competition',
                         venue: 'China Association of Remote Sensing Application, China Society of Surveying and Mapping',
                         desc: 'Awarded the Grand Prize for outstanding performance in low-altitude UAV data processing, and will represent the university at the national competition in Lanzhou.',
                         image: 'static/img/uav-data-processing-grand-prize.jpg',
@@ -517,6 +546,7 @@
                         icon: 'ri-file-text-line',
                         date: '2026.06',
                         title: 'GeoTarget: A Lightweight Visual Grounding Method for UAV Vision-Language Navigation',
+                        category: 'competition',
                         venue: 'First Prize in Surveying Science & Technology Paper, 18th CSU Surveying Innovation Competition — Heading to Wuhan Nationals!',
                         desc: 'Proposed GeoTarget, a lightweight vision-language model for UAV visual grounding. GeoTarget predicts target positions and integrates UAV pose, map geometry, and depth information to map 2D predictions into 3D world coordinates, providing target priors for downstream path planning and flight control.',
                         image: 'static/img/geotarget-paper-first-prize.jpg',
@@ -559,6 +589,9 @@
                     }
                 ]);
 
+                const newsItems = computed(() => news.value.filter(item => item.category !== 'competition').sort((a, b) => b.date.localeCompare(a.date)));
+                const achievements = computed(() => news.value.filter(item => item.category === 'competition').sort((a, b) => b.date.localeCompare(a.date)));
+
                 // ===== 统计数据 =====
                 const stats = ref([
                     { value: '3', label: 'Years of Study' },
@@ -579,10 +612,10 @@
                         name: { en: 'Yuyang Wu', zh: '吴雨阳' },
                         slogan: { en: 'Explore the unknown, code as the vessel', zh: '探索未知，代码为舟' }
                     },
-                    navKeys: ['about', 'projects', 'experience', 'news', 'moments', 'contact'],
+                    navKeys: ['about', 'projects', 'experience', 'news', 'achievements', 'moments', 'contact'],
                     navTitles: {
-                        en: ['About', 'Projects', 'Experience', 'News', 'Moments', 'Contact'],
-                        zh: ['关于', '项目', '经历', '动态', '瞬间', '联系']
+                        en: ['About', 'Projects', 'Experience', 'News', 'Achievements', 'Moments', 'Contact'],
+                        zh: ['关于', '项目', '经历', '动态', '竞赛成果', '瞬间', '联系']
                     },
                     profile: {
                         name: { en: 'Yuyang Wu', zh: '吴雨阳' },
@@ -761,7 +794,7 @@
                 // ===== 可见区域状态 =====
                 const visibleSections = reactive({
                     about: false, projects: false,
-                    experience: false, news: false, moments: false, stats: false, poetry: false, links: false
+                    experience: false, news: false, achievements: false, moments: false, stats: false, poetry: false, links: false
                 });
 
                 // ===== 打字效果 =====
@@ -949,7 +982,7 @@
                     lang, tt, toggleLang, showWechat, openWechat, closeWechat,
                     showEmail, openEmail, closeEmail, isSpecialLink, handleSocialClick,
                     site, navLinks, profile, socialLinks, about, projects,
-                    experience, news, stats, resourceLinks, typedText, hitokoto, poetry,
+                    experience, news, newsItems, achievements, stats, resourceLinks, typedText, hitokoto, poetry,
                     momentPhotos, carouselTrack, scrollCarousel,
                     pauseCarousel, resumeCarousel, currentYear, visibleSections
                 };
