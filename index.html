@@ -97,9 +97,6 @@
                                     <h3>{{ project.title }}</h3>
                                 </div>
                                 <p class="project-desc">{{ project.desc }}</p>
-                                <div class="project-tags">
-                                    <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
-                                </div>
                                 <div class="project-authors">
                                     <span class="authors-label">{{ tt('Authors', '作者') }}:</span>
                                     <a v-for="author in project.authors" :key="author.name"
