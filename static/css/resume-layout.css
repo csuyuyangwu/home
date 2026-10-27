@@ -11,9 +11,9 @@ body { font-family: Arial, 'Helvetica Neue', 'Microsoft YaHei', 'PingFang SC', s
     box-shadow: 0 3px 18px rgba(33, 37, 41, 0.05);
 }
 .resume-sheet .hero { min-height: 0; display: block; text-align: left; padding: 0 0 28px; margin-bottom: 30px; border-bottom: 1px solid var(--border); }
-.resume-sheet .hero-content { display: grid; grid-template-columns: minmax(0, 1fr) 150px; column-gap: 36px; align-items: start; animation: none; }
-.resume-sheet .avatar-container { grid-column: 2; grid-row: 1 / span 4; width: 150px; height: 170px; margin: 0; }
-.resume-sheet .avatar { width: 150px; height: 170px; border-radius: 4px; border: 1px solid var(--border); padding: 3px; object-fit: cover; }
+.resume-sheet .hero-content { display: grid; grid-template-columns: minmax(0, 1fr) 200px; column-gap: 36px; align-items: start; animation: none; }
+.resume-sheet .avatar-container { grid-column: 2; grid-row: 1 / span 4; width: 200px; height: 240px; margin: 0; }
+.resume-sheet .avatar { width: 200px; height: 240px; border-radius: 4px; border: 1px solid var(--border); padding: 3px; object-fit: cover; }
 .resume-sheet .avatar-name { grid-column: 1; grid-row: 1; text-align: left; font-size: 2rem; font-weight: 500; line-height: 1.25; margin: 0 0 12px; }
 .resume-sheet .title { grid-column: 1; grid-row: 2; font-size: 1rem; font-weight: 400; min-height: 1.7rem; margin-bottom: 8px; color: var(--accent); }
 .resume-sheet .subtitle { grid-column: 1; grid-row: 3; font-size: 0.98rem; letter-spacing: 0; margin-bottom: 10px; }
@@ -58,8 +58,8 @@ body { font-family: Arial, 'Helvetica Neue', 'Microsoft YaHei', 'PingFang SC', s
 @media (max-width: 600px) {
     html { font-size: 15px; }
     .resume-sheet { width: calc(100% - 24px); margin: 76px auto 24px; padding: 24px 18px 20px; border-radius: 8px; }
-    .resume-sheet .hero-content { grid-template-columns: minmax(0, 1fr) 96px; column-gap: 16px; }
-    .resume-sheet .avatar-container, .resume-sheet .avatar { width: 96px; height: 120px; }
+    .resume-sheet .hero-content { grid-template-columns: minmax(0, 1fr) 120px; column-gap: 16px; }
+    .resume-sheet .avatar-container, .resume-sheet .avatar { width: 120px; height: 150px; }
     .resume-sheet .avatar-container { grid-row: 1 / span 3; }
     .resume-sheet .avatar-name { font-size: 1.65rem; }
     .resume-sheet .bio { grid-column: 1 / -1; margin-top: 12px; }
